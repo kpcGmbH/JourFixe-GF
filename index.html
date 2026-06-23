@@ -38,11 +38,8 @@
   /* ---------- Header ---------- */
   header.app{background:var(--black);color:#fff;padding:14px 26px;display:flex;align-items:center;gap:22px;flex-shrink:0}
   .brand{display:flex;align-items:center;gap:14px}
-  .logo-bars{display:flex;gap:3px;align-items:flex-end;height:26px}
-  .logo-bars span{width:7px;border-radius:1px;height:26px}
-  .logo-bars span:nth-child(1){background:var(--accent)}
-  .logo-bars span:nth-child(2){background:#fff}
-  .logo-bars span:nth-child(3){background:var(--grey)}
+  .kpc-logo{height:30px;width:auto;display:block}
+  .brand .kpc-logo{color:#fff}   /* Buchstaben weiß auf schwarzem Header */
   .brand h1{font-family:var(--font-head);font-weight:400;font-size:22px;letter-spacing:1.15px;line-height:1;white-space:nowrap}
   .brand .sub{font-size:12.5px;color:var(--grey-light);letter-spacing:1.2px;text-transform:uppercase;margin-top:3px}
   .brand .stack{display:flex;flex-direction:column}
@@ -131,8 +128,7 @@
   /* ---------- Login ---------- */
   .login{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;align-items:center;justify-content:center;padding:24px}
   .login .panel{background:var(--white);border-radius:16px;padding:42px 40px;max-width:430px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
-  .login .logo-bars{justify-content:center;height:40px;margin:0 auto 22px}
-  .login .logo-bars span{width:11px;height:40px}
+  .login .kpc-logo{height:56px;margin:0 auto 22px;color:var(--text)}  /* dunkel auf weißem Panel, hell im Dark-Mode */
   .login h1{font-family:var(--font-head);font-weight:400;font-size:26px;letter-spacing:1.15px;margin-bottom:8px;color:var(--text)}
   .login .sub{font-size:14px;color:var(--text-soft);letter-spacing:.5px;margin-bottom:28px;line-height:1.5}
   .login button{font-family:var(--font-body);font-size:16px;letter-spacing:.6px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:13px 26px;cursor:pointer;display:inline-flex;align-items:center;gap:11px;width:100%;justify-content:center;transition:.15s}
@@ -157,7 +153,7 @@
 <!-- ===== Login ===== -->
 <div class="login" id="loginOv">
   <div class="panel">
-    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <svg class="kpc-logo" viewBox="0 0 149.8 181" xmlns="http://www.w3.org/2000/svg" aria-label="kpc"><path fill="currentColor" d="M10.8,81.5c5-7.4,17.7-25.3,24.6-35.6h12.1c-6.7,9.5-13.9,19.2-20.9,28.8l23,46.7H37.3l-18.1-38c-2,2.8-6.1,8.4-8.4,11.2v26.7H0C0,80.9,0,40.4,0,0c3.6,0,7.2,0,10.8,0C10.8,27.2,10.8,54.3,10.8,81.5z"/><path fill="currentColor" d="M149.8,98.3c-0.3,4.1-1.9,24.4-24.2,24.4c-19.6,0-25.1-17.4-25.1-39.3c0-21.3,6.9-38.8,26.1-38.8c21.9,0,22.9,20.2,23,23.8h-11.2c-0.1-2.9-1.2-14.4-12-14.4s-14.9,12-14.9,29.3c0,18.7,4.2,30,14.3,30c10.8,0,12.2-11.1,12.8-15H149.8L149.8,98.3z"/><path fill="currentColor" d="M49.9,181V67.8c0-10.3,0-17.3-0.1-22h10.6c0.1,1.4,0.5,6.4,0.5,10.2c2.5-6.5,7.9-11.3,17.8-11.3c14.3,0,22,12.6,22,37.8c0,27.2-9.4,40.2-24.2,40.2c-9,0-13.5-4.3-15.8-9V181H49.9z M75.3,54.1c-11.7,0-14.9,11.2-14.9,29S62.1,113,74.5,113c9.9,0,15-11.6,15-30C89.6,63.9,85.2,54.1,75.3,54.1z"/><rect y="132.2" fill="#895613" width="10.8" height="48.8"/><rect x="24.9" y="132.2" fill="#676C6E" width="10.8" height="48.8"/></svg>
     <h1>Jour Fixe Geschäftsführung</h1>
     <div class="sub">Bitte mit dem KPC-Microsoft-Konto anmelden.<br>Der Zugriff ist auf die Geschäftsführung beschränkt.</div>
     <button id="loginBtn" onclick="doMsLogin()">
@@ -172,7 +168,7 @@
 <!-- ===== App ===== -->
 <header class="app">
   <div class="brand">
-    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <svg class="kpc-logo" viewBox="0 0 149.8 181" xmlns="http://www.w3.org/2000/svg" aria-label="kpc"><path fill="currentColor" d="M10.8,81.5c5-7.4,17.7-25.3,24.6-35.6h12.1c-6.7,9.5-13.9,19.2-20.9,28.8l23,46.7H37.3l-18.1-38c-2,2.8-6.1,8.4-8.4,11.2v26.7H0C0,80.9,0,40.4,0,0c3.6,0,7.2,0,10.8,0C10.8,27.2,10.8,54.3,10.8,81.5z"/><path fill="currentColor" d="M149.8,98.3c-0.3,4.1-1.9,24.4-24.2,24.4c-19.6,0-25.1-17.4-25.1-39.3c0-21.3,6.9-38.8,26.1-38.8c21.9,0,22.9,20.2,23,23.8h-11.2c-0.1-2.9-1.2-14.4-12-14.4s-14.9,12-14.9,29.3c0,18.7,4.2,30,14.3,30c10.8,0,12.2-11.1,12.8-15H149.8L149.8,98.3z"/><path fill="currentColor" d="M49.9,181V67.8c0-10.3,0-17.3-0.1-22h10.6c0.1,1.4,0.5,6.4,0.5,10.2c2.5-6.5,7.9-11.3,17.8-11.3c14.3,0,22,12.6,22,37.8c0,27.2-9.4,40.2-24.2,40.2c-9,0-13.5-4.3-15.8-9V181H49.9z M75.3,54.1c-11.7,0-14.9,11.2-14.9,29S62.1,113,74.5,113c9.9,0,15-11.6,15-30C89.6,63.9,85.2,54.1,75.3,54.1z"/><rect y="132.2" fill="#895613" width="10.8" height="48.8"/><rect x="24.9" y="132.2" fill="#676C6E" width="10.8" height="48.8"/></svg>
     <div class="stack">
       <h1>Jour Fixe Geschäftsführung</h1>
       <div class="sub">kpc · Tagesordnung &amp; Maßnahmen</div>
@@ -434,7 +430,7 @@ function showAccessDenied(){
   ov.style.display='flex';
   const wer = esc(deriveName(msalAccount) || (msalAccount&&msalAccount.username) || 'dieses Konto');
   ov.querySelector('.panel').innerHTML = `
-    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <svg class="kpc-logo" viewBox="0 0 149.8 181" xmlns="http://www.w3.org/2000/svg" aria-label="kpc"><path fill="currentColor" d="M10.8,81.5c5-7.4,17.7-25.3,24.6-35.6h12.1c-6.7,9.5-13.9,19.2-20.9,28.8l23,46.7H37.3l-18.1-38c-2,2.8-6.1,8.4-8.4,11.2v26.7H0C0,80.9,0,40.4,0,0c3.6,0,7.2,0,10.8,0C10.8,27.2,10.8,54.3,10.8,81.5z"/><path fill="currentColor" d="M149.8,98.3c-0.3,4.1-1.9,24.4-24.2,24.4c-19.6,0-25.1-17.4-25.1-39.3c0-21.3,6.9-38.8,26.1-38.8c21.9,0,22.9,20.2,23,23.8h-11.2c-0.1-2.9-1.2-14.4-12-14.4s-14.9,12-14.9,29.3c0,18.7,4.2,30,14.3,30c10.8,0,12.2-11.1,12.8-15H149.8L149.8,98.3z"/><path fill="currentColor" d="M49.9,181V67.8c0-10.3,0-17.3-0.1-22h10.6c0.1,1.4,0.5,6.4,0.5,10.2c2.5-6.5,7.9-11.3,17.8-11.3c14.3,0,22,12.6,22,37.8c0,27.2-9.4,40.2-24.2,40.2c-9,0-13.5-4.3-15.8-9V181H49.9z M75.3,54.1c-11.7,0-14.9,11.2-14.9,29S62.1,113,74.5,113c9.9,0,15-11.6,15-30C89.6,63.9,85.2,54.1,75.3,54.1z"/><rect y="132.2" fill="#895613" width="10.8" height="48.8"/><rect x="24.9" y="132.2" fill="#676C6E" width="10.8" height="48.8"/></svg>
     <h1>Kein Zugriff</h1>
     <div class="sub">Der Jour Fixe ist der <b>Geschäftsführung</b> vorbehalten.<br>
       Du bist als <b>${wer}</b> angemeldet, hast aber keine Berechtigung für diesen Bereich.<br>
