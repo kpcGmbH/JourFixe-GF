@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jour Fixe Geschäftsführung · kpc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<!-- Microsoft Authentication Library (MSAL) -->
+<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.4/lib/msal-browser.min.js"></script>
+<style>
+  :root{
+    --black:#000000; --beige:#d7c1ae; --beige-soft:#efe6dd;
+    --grey:#676c6e; --grey-mid:#55595c; --grey-light:#a8a8a8; --grey-dark:#424242;
+    --warm:#928474; --accent:#895613; --accent-soft:#a86b1d;
+    --paper:#f7f4f1; --white:#ffffff; --line:#e3ddd6;
+    --col-bg:#ece6df; --card-bg:#ffffff; --text:#000; --text-soft:#55595c;
+    --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.06);
+    --shadow-lg:0 8px 30px rgba(0,0,0,.16);
+    --font-head:'Bodoni Moda',Georgia,serif;
+    --font-body:'Roboto Condensed','Arial Narrow',sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#1b1917; --white:#23211e; --line:#34302b;
+      --col-bg:#242220; --card-bg:#2b2825; --text:#f2ede7; --text-soft:#b3aaa0;
+      --beige-soft:#33302b; --grey-dark:#cfc7bd;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.4);
+      --shadow-lg:0 8px 30px rgba(0,0,0,.6);
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--font-body);font-weight:300;letter-spacing:.2px;color:var(--text);
+    background:var(--paper);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+  /* ---------- Header ---------- */
+  header.app{background:var(--black);color:#fff;padding:14px 26px;display:flex;align-items:center;gap:22px;flex-shrink:0}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo-bars{display:flex;gap:3px;align-items:flex-end;height:26px}
+  .logo-bars span{width:7px;border-radius:1px;height:26px}
+  .logo-bars span:nth-child(1){background:var(--accent)}
+  .logo-bars span:nth-child(2){background:#fff}
+  .logo-bars span:nth-child(3){background:var(--grey)}
+  .brand h1{font-family:var(--font-head);font-weight:400;font-size:22px;letter-spacing:1.15px;line-height:1;white-space:nowrap}
+  .brand .sub{font-size:12.5px;color:var(--grey-light);letter-spacing:1.2px;text-transform:uppercase;margin-top:3px}
+  .brand .stack{display:flex;flex-direction:column}
+  header.app .spacer{flex:1}
+  .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .search{background:#1b1b1b;border:1px solid #333;border-radius:7px;display:flex;align-items:center;gap:8px;padding:7px 11px}
+  .search input{background:transparent;border:none;outline:none;color:#fff;font-family:var(--font-body);font-size:14px;width:150px;letter-spacing:.4px}
+  .search input::placeholder{color:var(--grey-light)}
+  select.filter{background:#1b1b1b;color:#fff;border:1px solid #333;border-radius:7px;padding:8px 11px;font-family:var(--font-body);font-size:14px;outline:none;cursor:pointer}
+  button.btn{font-family:var(--font-body);font-size:14px;letter-spacing:.6px;border:none;border-radius:7px;padding:9px 16px;cursor:pointer;font-weight:400;display:inline-flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
+  button.btn.primary{background:var(--accent);color:#fff}
+  button.btn.primary:hover{background:var(--accent-soft)}
+  button.btn.ghost{background:transparent;color:#fff;border:1px solid #3a3a3a}
+  button.btn.ghost:hover{background:#1b1b1b}
+  button.btn svg{width:16px;height:16px}
+  .userbadge{display:flex;align-items:center;gap:9px;color:#fff;font-size:13.5px;letter-spacing:.4px}
+  .userbadge .av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .userbadge .out{background:none;border:none;color:var(--grey-light);cursor:pointer;font-size:12px;text-decoration:underline}
+  .userbadge .out:hover{color:#fff}
+  .sync{font-size:12px;color:var(--grey-light);display:flex;align-items:center;gap:6px;min-width:90px}
+  .sync .dot{width:8px;height:8px;border-radius:50%;background:#5b8a5b}
+  .sync.busy .dot{background:#c79a3a;animation:pulse 1s infinite}
+  .sync.err .dot{background:#b85a5a}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* ---------- Board ---------- */
+  .board-wrap{flex:1;overflow-x:auto;overflow-y:hidden;padding:20px 22px 8px}
+  .board{display:flex;gap:16px;height:100%;align-items:flex-start;min-height:0}
+  .col{background:var(--col-bg);border-radius:12px;width:286px;min-width:286px;display:flex;flex-direction:column;max-height:100%;border-top:4px solid var(--col-color,var(--grey))}
+  .col-head{padding:13px 15px 10px;display:flex;align-items:center;gap:9px}
+  .col-dot{width:10px;height:10px;border-radius:50%;background:var(--col-color);flex-shrink:0}
+  .col-head h2{font-family:var(--font-body);font-weight:700;font-size:14px;letter-spacing:.8px;text-transform:uppercase;color:var(--text)}
+  .col-head .count{margin-left:auto;background:rgba(125,125,125,.18);color:var(--grey-dark);border-radius:20px;font-size:12.5px;padding:2px 9px;font-weight:700}
+  .col-body{flex:1;overflow-y:auto;padding:4px 11px 11px;display:flex;flex-direction:column;gap:10px}
+  .col-body.dragover{background:rgba(137,86,19,.12);outline:2px dashed var(--accent);outline-offset:-6px;border-radius:8px}
+  .col-add{margin:0 11px 12px;padding:9px;border:1px dashed #b3a89a80;border-radius:8px;color:var(--text-soft);font-size:13.5px;text-align:center;cursor:pointer;letter-spacing:.5px;transition:.15s}
+  .col-add:hover{background:rgba(125,125,125,.08);color:var(--accent)}
+
+  /* ---------- Card ---------- */
+  .card{background:var(--card-bg);border-radius:9px;box-shadow:var(--shadow);padding:12px 13px 11px;cursor:grab;position:relative;overflow:hidden;border-left:4px solid var(--cat-color,var(--grey));transition:box-shadow .15s}
+  .card:hover{box-shadow:var(--shadow-lg)}
+  .card.dragging{opacity:.5}
+  .card .cat-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#fff;background:var(--cat-color);border-radius:4px;padding:2px 7px;margin-bottom:7px}
+  .card h3{font-family:var(--font-body);font-weight:400;font-size:15.5px;line-height:1.3;letter-spacing:.2px;color:var(--text)}
+  .card p.desc{font-size:13px;color:var(--text-soft);margin-top:5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .meta{display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap}
+  .prio{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+  .prio.hoch{background:#f3dada;color:#9a2b2b}
+  .prio.mittel{background:#f5ecd9;color:#8a6516}
+  .prio.niedrig{background:#e3ece3;color:#3f6b41}
+  .due{font-size:12px;color:var(--text-soft);display:inline-flex;align-items:center;gap:4px}
+  .due svg{width:12px;height:12px}
+  .due.overdue{color:#c45a5a;font-weight:700}
+  .owner{margin-left:auto;width:27px;height:27px;border-radius:50%;background:var(--grey);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.3px}
+  .card .grip{position:absolute;top:9px;right:10px;color:#cfc8c0;opacity:0;transition:.15s}
+  .card:hover .grip{opacity:1}
+  .card .grip svg{width:15px;height:15px}
+
+  /* ---------- Modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,16,12,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .overlay.open{display:flex}
+  .modal{background:var(--white);border-radius:14px;width:560px;max-width:100%;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+  .modal-head{padding:20px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+  .modal-head h2{font-family:var(--font-head);font-weight:400;font-size:21px;letter-spacing:1.15px;color:var(--text)}
+  .modal-head .x{margin-left:auto;cursor:pointer;color:var(--grey);font-size:24px;line-height:1;background:none;border:none}
+  .modal-head .x:hover{color:var(--text)}
+  .modal-body{padding:20px 24px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-soft);margin-bottom:6px}
+  .field input,.field select,.field textarea{width:100%;font-family:var(--font-body);font-size:15px;font-weight:300;letter-spacing:.3px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;background:var(--paper);color:var(--text)}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+  .field textarea{resize:vertical;min-height:78px;line-height:1.45}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .modal-foot{padding:14px 24px 22px;display:flex;gap:10px;align-items:center}
+  .modal-foot .del{margin-right:auto;color:#b85a5a;background:none;border:none;cursor:pointer;font-family:var(--font-body);font-size:14px;letter-spacing:.4px}
+  .modal-foot .del:hover{text-decoration:underline}
+  button.solid{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-family:var(--font-body);font-size:14.5px;letter-spacing:.6px;cursor:pointer}
+  button.solid:hover{background:var(--accent-soft)}
+  button.cancel{background:var(--beige-soft);color:var(--grey-dark);border:none;border-radius:8px;padding:10px 18px;font-family:var(--font-body);font-size:14.5px;letter-spacing:.6px;cursor:pointer}
+
+  footer.bar{flex-shrink:0;padding:7px 24px;background:var(--col-bg);border-top:1px solid var(--line);font-size:12px;color:var(--text-soft);letter-spacing:.5px;display:flex;align-items:center;gap:16px}
+  footer.bar .claim{font-family:var(--font-head);font-style:italic;letter-spacing:.8px}
+  footer.bar .right{margin-left:auto}
+  .empty-hint{color:var(--grey-light);font-size:13px;text-align:center;padding:18px 6px;font-style:italic}
+
+  /* ---------- Login ---------- */
+  .login{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;align-items:center;justify-content:center;padding:24px}
+  .login .panel{background:var(--white);border-radius:16px;padding:42px 40px;max-width:430px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
+  .login .logo-bars{justify-content:center;height:40px;margin:0 auto 22px}
+  .login .logo-bars span{width:11px;height:40px}
+  .login h1{font-family:var(--font-head);font-weight:400;font-size:26px;letter-spacing:1.15px;margin-bottom:8px;color:var(--text)}
+  .login .sub{font-size:14px;color:var(--text-soft);letter-spacing:.5px;margin-bottom:28px;line-height:1.5}
+  .login button{font-family:var(--font-body);font-size:16px;letter-spacing:.6px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:13px 26px;cursor:pointer;display:inline-flex;align-items:center;gap:11px;width:100%;justify-content:center;transition:.15s}
+  .login button:hover{background:var(--accent-soft)}
+  .login button:disabled{opacity:.6;cursor:default}
+  .login .ms-logo{width:18px;height:18px;display:inline-grid;grid-template-columns:1fr 1fr;gap:2px}
+  .login .ms-logo i{display:block}
+  .login .ms-logo i:nth-child(1){background:#f25022}
+  .login .ms-logo i:nth-child(2){background:#7fba00}
+  .login .ms-logo i:nth-child(3){background:#00a4ef}
+  .login .ms-logo i:nth-child(4){background:#ffb900}
+  .login .status{margin-top:18px;font-size:13.5px;color:var(--text-soft);min-height:18px;letter-spacing:.3px}
+  .login .claim{margin-top:26px;font-family:var(--font-head);font-style:italic;font-size:13px;color:var(--grey-light)}
+
+  ::-webkit-scrollbar{height:10px;width:10px}
+  ::-webkit-scrollbar-thumb{background:#cdc4ba80;border-radius:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<!-- ===== Login ===== -->
+<div class="login" id="loginOv">
+  <div class="panel">
+    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <h1>Jour Fixe Geschäftsführung</h1>
+    <div class="sub">Bitte mit dem KPC-Microsoft-Konto anmelden.<br>Der Zugriff ist auf die Geschäftsführung beschränkt.</div>
+    <button id="loginBtn" onclick="doMsLogin()">
+      <span class="ms-logo"><i></i><i></i><i></i><i></i></span>
+      Mit Microsoft anmelden
+    </button>
+    <div class="status" id="loginStatus"></div>
+    <div class="claim">we think, we create, we love kitchens.</div>
+  </div>
+</div>
+
+<!-- ===== App ===== -->
+<header class="app">
+  <div class="brand">
+    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <div class="stack">
+      <h1>Jour Fixe Geschäftsführung</h1>
+      <div class="sub">kpc · Tagesordnung &amp; Maßnahmen</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="toolbar">
+    <div class="sync" id="sync"><span class="dot"></span><span id="syncTxt">Synchron</span></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#a8a8a8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Suchen…">
+    </div>
+    <select class="filter" id="catFilter"><option value="">Alle Kategorien</option></select>
+    <button class="btn ghost" id="reloadBtn" title="Neu laden">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-2.6-6.4M21 3v5h-5"/></svg>
+    </button>
+    <button class="btn primary" id="newBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Neuer Punkt
+    </button>
+    <div class="userbadge" id="userbadge"></div>
+  </div>
+</header>
+
+<div class="board-wrap"><div class="board" id="board"></div></div>
+
+<footer class="bar">
+  <span class="claim">Beständigkeit.</span>
+  <span id="stat"></span>
+  <span class="right">Gespeichert in SharePoint · kpc Geschäftsführung</span>
+</footer>
+
+<!-- ===== Modal ===== -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modalTitle">Neuer Tagesordnungspunkt</h2>
+      <button class="x" id="closeModal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Titel</label><input id="f-title" type="text" placeholder="Worum geht es?"></div>
+      <div class="field"><label>Beschreibung / Notiz</label><textarea id="f-desc" placeholder="Hintergrund, Entscheidung, To-dos …"></textarea></div>
+      <div class="row2">
+        <div class="field"><label>Kategorie</label><select id="f-cat"></select></div>
+        <div class="field"><label>Status / Spalte</label><select id="f-status"></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Priorität</label>
+          <select id="f-prio"><option value="niedrig">Niedrig</option><option value="mittel" selected>Mittel</option><option value="hoch">Hoch</option></select>
+        </div>
+        <div class="field"><label>Verantwortlich</label><input id="f-owner" type="text" placeholder="z. B. AH, JW, Name"></div>
+      </div>
+      <div class="field"><label>Fällig bis (optional)</label><input id="f-due" type="date"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="del" id="deleteBtn" style="display:none">Löschen</button>
+      <button class="cancel" id="cancelBtn">Abbrechen</button>
+      <button class="solid" id="saveBtn">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   KONFIGURATION – nach Entra/SharePoint-Setup ausfüllen
+   (siehe SETUP.md). tenantId & spHost gelten KPC-weit.
+   ============================================================ */
+const MS_CONFIG = {
+  tenantId: 'cba1b1fc-4a80-4da1-a7f1-e3e4614056eb',          // KPC-Tenant (fest – nicht ändern)
+  clientId: '32d7b45e-2ff0-45e1-8c5f-1b9c315fa39e',          // Entra-App "JourFixe_GF"
+  spHost:   'kpcfulda.sharepoint.com',                        // KPC-Tenant (fest – nicht ändern)
+  sitePath: '/sites/JourFixe_GF',                             // ← Pfad der SharePoint-Site (mit Unterstrich)
+  listName: 'Agenda'                                          // ← Name der SharePoint-Liste (Anleitung Schritt 2)
+};
+const GRAPH = 'https://graph.microsoft.com/v1.0';
+const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All'];     // delegiert: App handelt nur als angemeldeter Nutzer
+const USE_REDIRECT = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+  || (typeof window.matchMedia==='function' && window.matchMedia('(pointer: coarse)').matches);
+
+/* ---------------- Fachliche Konfiguration ---------------- */
+const COLUMNS = [
+  { key:'gesammelt',   title:'Gesammelt',      color:'#928474', hint:'Themen, die noch aufgenommen werden' },
+  { key:'agenda',      title:'Auf der Agenda', color:'#895613', hint:'Für den nächsten Jour Fixe vorgemerkt' },
+  { key:'besprechung', title:'In Besprechung', color:'#55595c', hint:'Heute auf dem Tisch' },
+  { key:'umsetzung',   title:'In Umsetzung',   color:'#676c6e', hint:'Beschlossen – wird bearbeitet' },
+  { key:'erledigt',    title:'Erledigt',       color:'#3f6b41', hint:'Abgeschlossen' },
+];
+const CATEGORIES = [
+  { key:'strategie', name:'Strategie & Unternehmen',  color:'#895613' },
+  { key:'finanzen',  name:'Finanzen & Controlling',   color:'#3f6b41' },
+  { key:'personal',  name:'Personal & HR',            color:'#7a4a8a' },
+  { key:'vertrieb',  name:'Vertrieb & Kunden',        color:'#2f6f8f' },
+  { key:'projekte',  name:'Projekte & Aufträge',      color:'#b5722a' },
+  { key:'einkauf',   name:'Einkauf & Lieferanten',    color:'#8a6516' },
+  { key:'it',        name:'IT & Digitalisierung',     color:'#3a6ea5' },
+  { key:'orga',      name:'Organisation & Prozesse',  color:'#676c6e' },
+  { key:'marketing', name:'Marketing & Kommunikation',color:'#b03a5b' },
+  { key:'recht',     name:'Recht & Compliance',       color:'#55595c' },
+  { key:'sonstiges', name:'Sonstiges',                color:'#928474' },
+];
+const catMap = Object.fromEntries(CATEGORIES.map(c=>[c.key,c]));
+
+/* ---------------- State ---------------- */
+let items = [];          // {id, title, desc, cat, status, prio, owner, due, created}
+let editingId = null;
+
+/* ============================================================
+   BACKEND: Microsoft 365 (MSAL + SharePoint-Liste via Graph)
+   ============================================================ */
+let msalApp = null, msalAccount = null;
+const SPIDS = { siteId:null, listId:null };
+
+async function msalInit(){
+  msalApp = new msal.PublicClientApplication({
+    auth:{
+      clientId: MS_CONFIG.clientId,
+      authority: 'https://login.microsoftonline.com/' + MS_CONFIG.tenantId,
+      redirectUri: (window.location.origin + window.location.pathname).replace(/index\.html$/, '')
+    },
+    cache:{ cacheLocation:'localStorage' }
+  });
+  if(typeof msalApp.initialize === 'function') await msalApp.initialize();
+  const resp = await msalApp.handleRedirectPromise();
+  if(resp && resp.account) msalAccount = resp.account;
+  if(!msalAccount){ const a = msalApp.getAllAccounts(); if(a.length) msalAccount = a[0]; }
+  if(msalAccount) msalApp.setActiveAccount(msalAccount);
+  return msalAccount;
+}
+// Popup blockiert? -> dann auf Redirect-Flow ausweichen
+function isPopupBlocked(e){
+  const m = (((e&&e.errorCode)||'')+' '+((e&&e.message)||''));
+  return /popup_window_error|empty_window_error|popup.*block/i.test(m);
+}
+async function msalLogin(){
+  if(!msalApp){ if(typeof msal==='undefined') throw new Error('MSAL nicht geladen (Internet/CDN prüfen)'); await msalInit(); }
+  if(USE_REDIRECT){ await msalApp.loginRedirect({ scopes:GRAPH_SCOPES }); return null; }
+  try{
+    const res = await msalApp.loginPopup({ scopes:GRAPH_SCOPES, prompt:'select_account' });
+    msalAccount = res.account; msalApp.setActiveAccount(msalAccount); return msalAccount;
+  }catch(e){
+    if(isPopupBlocked(e)){ await msalApp.loginRedirect({ scopes:GRAPH_SCOPES }); return null; }
+    throw e;
+  }
+}
+async function getToken(){
+  try{ return (await msalApp.acquireTokenSilent({ scopes:GRAPH_SCOPES, account:msalAccount })).accessToken; }
+  catch(e){
+    if(USE_REDIRECT){ await msalApp.acquireTokenRedirect({ scopes:GRAPH_SCOPES }); throw e; }
+    try{
+      const res = await msalApp.acquireTokenPopup({ scopes:GRAPH_SCOPES }); msalAccount = res.account; return res.accessToken;
+    }catch(e2){
+      if(isPopupBlocked(e2)){ await msalApp.acquireTokenRedirect({ scopes:GRAPH_SCOPES }); throw e2; }
+      throw e2;
+    }
+  }
+}
+async function graph(path, opts){
+  opts = opts || {};
+  const token = await getToken();
+  const headers = Object.assign({ Authorization:'Bearer '+token }, opts.headers||{});
+  const res = await fetch(GRAPH + path, Object.assign({}, opts, { headers }));
+  if(!res.ok){ const t = await res.text(); throw new Error('Graph '+res.status+': '+t.substring(0,300)); }
+  return res;
+}
+async function resolveIds(){
+  const site = await (await graph('/sites/'+MS_CONFIG.spHost+':'+MS_CONFIG.sitePath)).json();
+  SPIDS.siteId = site.id;
+  const lists = await (await graph('/sites/'+SPIDS.siteId+'/lists?$filter='+
+    encodeURIComponent("displayName eq '"+MS_CONFIG.listName+"'"))).json();
+  if(!lists.value || !lists.value.length) throw new Error('Liste "'+MS_CONFIG.listName+'" nicht gefunden');
+  SPIDS.listId = lists.value[0].id;
+}
+
+/* ---- CRUD auf der SharePoint-Liste ---- */
+function packData(it){
+  return JSON.stringify({ desc:it.desc||'', cat:it.cat||'sonstiges', status:it.status||'gesammelt',
+    prio:it.prio||'mittel', owner:it.owner||'', due:it.due||'', created:it.created||'' });
+}
+async function spLoad(){
+  const out = [];
+  let url = '/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items?$expand=fields&$top=2000';
+  while(url){
+    const data = await (await graph(url)).json();
+    (data.value||[]).forEach(it=>{
+      const f = it.fields||{};
+      let d = {}; try{ d = f.data ? JSON.parse(f.data) : {}; }catch(e){ d = {}; }
+      out.push({ id:it.id, title:f.Title||'(ohne Titel)', desc:d.desc||'', cat:d.cat||'sonstiges',
+        status:d.status||'gesammelt', prio:d.prio||'mittel', owner:d.owner||'', due:d.due||'',
+        created:d.created||it.createdDateTime||'' });
+    });
+    url = data['@odata.nextLink'] ? data['@odata.nextLink'].replace(GRAPH,'') : null;
+  }
+  return out;
+}
+async function spCreate(it){
+  const res = await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ fields:{ Title:it.title, data:packData(it) } })
+  });
+  return (await res.json()).id;
+}
+async function spUpdate(it){
+  await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items/'+it.id+'/fields', {
+    method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ Title:it.title, data:packData(it) })
+  });
+}
+async function spDelete(id){
+  await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items/'+id, { method:'DELETE' });
+}
+
+/* ---- Sync-Indikator ---- */
+function setSync(state, txt){
+  const el=document.getElementById('sync');
+  el.className='sync'+(state==='busy'?' busy':state==='err'?' err':'');
+  document.getElementById('syncTxt').textContent = txt || (state==='busy'?'Speichere…':state==='err'?'Fehler':'Synchron');
+}
+async function withSync(fn){
+  setSync('busy');
+  try{ await fn(); setSync('ok'); }
+  catch(e){ console.error(e); setSync('err', 'Fehler – siehe Konsole'); alert('Aktion fehlgeschlagen:\n'+(e.message||e)); }
+}
+
+/* ============================================================
+   LOGIN-FLOW
+   ============================================================ */
+function deriveName(account){
+  if(!account) return '';
+  let n = (account.name || account.username || '').trim();
+  if(n.includes(',')){ const p=n.split(',').map(s=>s.trim()); if(p.length===2&&p[0]&&p[1]) n = p[1]+' '+p[0]; }
+  if(/@/.test(n)){ n = n.split('@')[0].replace(/[._]+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase()); }
+  return n;
+}
+function initials(name){
+  if(!name) return '–';
+  const p = name.trim().split(/\s+/);
+  return (p.length===1 ? p[0].slice(0,2) : p[0][0]+p[p.length-1][0]).toUpperCase();
+}
+async function doMsLogin(){
+  const btn=document.getElementById('loginBtn'), st=document.getElementById('loginStatus');
+  try{
+    btn.disabled=true; st.textContent='Anmeldung läuft …';
+    await msalLogin();
+    if(msalAccount) await onLoggedIn();   // Popup-Fall; bei Redirect navigiert die Seite weg
+  }catch(e){ btn.disabled=false; st.textContent='Anmeldung fehlgeschlagen: '+(e.message||e); console.error(e); }
+}
+async function onLoggedIn(){
+  const st=document.getElementById('loginStatus');
+  st.textContent='Verbinde mit SharePoint …';
+  await resolveIds();
+  st.textContent='Lade Tagesordnung …';
+  items = await spLoad();
+  // User-Badge
+  const name = deriveName(msalAccount) || 'Konto';
+  document.getElementById('userbadge').innerHTML =
+    `<div class="av" title="${esc(name)}">${initials(name)}</div><span>${esc(name)}</span><button class="out" onclick="signOut()">Abmelden</button>`;
+  document.getElementById('loginOv').style.display='none';
+  render();
+}
+function signOut(){
+  try{ msalApp.logoutRedirect(); }catch(e){ location.reload(); }
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const board = document.getElementById('board');
+function render(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const cf = document.getElementById('catFilter').value;
+  board.innerHTML=''; let shown=0;
+  COLUMNS.forEach(col=>{
+    const colEl=document.createElement('div');
+    colEl.className='col'; colEl.style.setProperty('--col-color',col.color);
+    let list = items.filter(it=>it.status===col.key);
+    if(cf) list = list.filter(it=>it.cat===cf);
+    if(q) list = list.filter(it=>(it.title+' '+(it.desc||'')+' '+(it.owner||'')).toLowerCase().includes(q));
+    shown += list.length;
+    colEl.innerHTML = `
+      <div class="col-head"><span class="col-dot"></span><h2>${col.title}</h2><span class="count">${list.length}</span></div>
+      <div class="col-body" data-col="${col.key}"></div>
+      <div class="col-add" data-col="${col.key}">+ Punkt hinzufügen</div>`;
+    const body = colEl.querySelector('.col-body');
+    if(list.length===0){ const e=document.createElement('div'); e.className='empty-hint'; e.textContent=col.hint; body.appendChild(e); }
+    list.sort((a,b)=> (b.created||'').localeCompare(a.created||'')).forEach(it=>body.appendChild(cardEl(it)));
+    body.addEventListener('dragover',e=>{e.preventDefault();body.classList.add('dragover');});
+    body.addEventListener('dragleave',()=>body.classList.remove('dragover'));
+    body.addEventListener('drop',e=>{
+      e.preventDefault();body.classList.remove('dragover');
+      const id=e.dataTransfer.getData('text/plain');
+      const it=items.find(x=>String(x.id)===String(id));
+      if(it && it.status!==col.key){ it.status=col.key; render(); withSync(()=>spUpdate(it)); }
+    });
+    colEl.querySelector('.col-add').addEventListener('click',()=>openModal(null,col.key));
+    board.appendChild(colEl);
+  });
+  document.getElementById('stat').textContent = `${items.length} Punkte gesamt · ${shown} angezeigt`;
+}
+function cardEl(it){
+  const cat=catMap[it.cat]||{name:'—',color:'#999'};
+  const el=document.createElement('div');
+  el.className='card'; el.style.setProperty('--cat-color',cat.color); el.draggable=true;
+  const overdue = it.due && it.status!=='erledigt' && it.due < new Date().toISOString().slice(0,10);
+  el.innerHTML=`
+    <span class="grip"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>
+    <span class="cat-tag">${cat.name}</span>
+    <h3>${esc(it.title)}</h3>
+    ${it.desc?`<p class="desc">${esc(it.desc)}</p>`:''}
+    <div class="meta">
+      <span class="prio ${it.prio}">${it.prio}</span>
+      ${it.due?`<span class="due ${overdue?'overdue':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${fmtDate(it.due)}</span>`:''}
+      ${it.owner?`<span class="owner" title="${esc(it.owner)}">${initials(it.owner)}</span>`:''}
+    </div>`;
+  el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',it.id);el.classList.add('dragging');});
+  el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  el.addEventListener('click',()=>openModal(it.id));
+  return el;
+}
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y.slice(2)}`; }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+const overlay=document.getElementById('overlay');
+function openModal(id, presetStatus){
+  editingId=id;
+  const it = id ? items.find(x=>String(x.id)===String(id)) : null;
+  document.getElementById('modalTitle').textContent = it ? 'Punkt bearbeiten' : 'Neuer Tagesordnungspunkt';
+  document.getElementById('f-title').value = it?it.title:'';
+  document.getElementById('f-desc').value = it?(it.desc||''):'';
+  document.getElementById('f-cat').value = it?it.cat:CATEGORIES[0].key;
+  document.getElementById('f-status').value = it?it.status:(presetStatus||COLUMNS[0].key);
+  document.getElementById('f-prio').value = it?it.prio:'mittel';
+  document.getElementById('f-owner').value = it?(it.owner||''):'';
+  document.getElementById('f-due').value = it?(it.due||''):'';
+  document.getElementById('deleteBtn').style.display = it?'block':'none';
+  overlay.classList.add('open');
+  setTimeout(()=>document.getElementById('f-title').focus(),50);
+}
+function closeModal(){overlay.classList.remove('open');editingId=null;}
+
+document.getElementById('saveBtn').addEventListener('click',()=>{
+  const t=document.getElementById('f-title').value.trim();
+  if(!t){document.getElementById('f-title').focus();return;}
+  const data={
+    title:t, desc:document.getElementById('f-desc').value.trim(),
+    cat:document.getElementById('f-cat').value, status:document.getElementById('f-status').value,
+    prio:document.getElementById('f-prio').value, owner:document.getElementById('f-owner').value.trim(),
+    due:document.getElementById('f-due').value,
+  };
+  if(editingId){
+    const it=items.find(x=>String(x.id)===String(editingId)); Object.assign(it,data);
+    render(); closeModal(); withSync(()=>spUpdate(it));
+  } else {
+    const it={ id:'tmp'+Date.now(), created:new Date().toISOString(), ...data };
+    items.unshift(it); render(); closeModal();
+    withSync(async ()=>{ it.id = await spCreate(it); });
+  }
+});
+document.getElementById('deleteBtn').addEventListener('click',()=>{
+  if(editingId && confirm('Diesen Punkt wirklich löschen?')){
+    const id=editingId; items=items.filter(x=>String(x.id)!==String(id));
+    render(); closeModal(); withSync(()=>spDelete(id));
+  }
+});
+document.getElementById('closeModal').addEventListener('click',closeModal);
+document.getElementById('cancelBtn').addEventListener('click',closeModal);
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ---------------- Toolbar ---------------- */
+document.getElementById('newBtn').addEventListener('click',()=>openModal(null));
+document.getElementById('search').addEventListener('input',render);
+document.getElementById('catFilter').addEventListener('change',render);
+document.getElementById('reloadBtn').addEventListener('click',()=>withSync(async ()=>{ items=await spLoad(); render(); }));
+
+/* ---------------- Init ---------------- */
+(function init(){
+  const catSel=document.getElementById('f-cat'), catFilter=document.getElementById('catFilter');
+  CATEGORIES.forEach(c=>{
+    catSel.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.name}</option>`);
+    catFilter.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.name}</option>`);
+  });
+  const statSel=document.getElementById('f-status');
+  COLUMNS.forEach(c=> statSel.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.title}</option>`));
+  // MSAL initialisieren; falls schon angemeldet -> direkt rein
+  msalInit().then(()=>{ if(msalAccount) return onLoggedIn(); })
+    .catch(e=>{ document.getElementById('loginStatus').textContent = 'Hinweis: '+(e.message||e); console.warn(e); });
+})();
+</script>
+</body>
+</html>
