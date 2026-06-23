@@ -416,14 +416,43 @@ async function doMsLogin(){
     btn.disabled=true; st.textContent='Anmeldung läuft …';
     await msalLogin();
     if(msalAccount) await onLoggedIn();   // Popup-Fall; bei Redirect navigiert die Seite weg
-  }catch(e){ btn.disabled=false; st.textContent='Anmeldung fehlgeschlagen: '+(e.message||e); console.error(e); }
+  }catch(e){
+    btn.disabled=false;
+    const sig=((e&&e.errorCode)||'')+' '+((e&&e.message)||'');
+    if(/user_cancelled|user_canceled/i.test(sig)) st.textContent='Anmeldung abgebrochen – bitte erneut versuchen.';
+    else st.textContent='Anmeldung fehlgeschlagen: '+(e.message||e);
+    console.error(e);
+  }
+}
+// 403 / Zugriff verweigert (KPC-Konto, aber nicht Mitglied der GF-Site)
+function isAccessDenied(e){
+  const m = ((e&&e.message)||'')+'';
+  return /Graph 403|Graph 401|"code":\s*"accessDenied"|access ?denied|forbidden|unauthorized/i.test(m);
+}
+function showAccessDenied(){
+  const ov=document.getElementById('loginOv');
+  ov.style.display='flex';
+  const wer = esc(deriveName(msalAccount) || (msalAccount&&msalAccount.username) || 'dieses Konto');
+  ov.querySelector('.panel').innerHTML = `
+    <div class="logo-bars"><span></span><span></span><span></span></div>
+    <h1>Kein Zugriff</h1>
+    <div class="sub">Der Jour Fixe ist der <b>Geschäftsführung</b> vorbehalten.<br>
+      Du bist als <b>${wer}</b> angemeldet, hast aber keine Berechtigung für diesen Bereich.<br>
+      Bei Bedarf bitte an die Geschäftsführung wenden.</div>
+    <button onclick="signOut()">Mit anderem Konto anmelden</button>
+    <div class="claim">we think, we create, we love kitchens.</div>`;
 }
 async function onLoggedIn(){
   const st=document.getElementById('loginStatus');
-  st.textContent='Verbinde mit SharePoint …';
-  await resolveIds();
-  st.textContent='Lade Tagesordnung …';
-  items = await spLoad();
+  if(st) st.textContent='Verbinde mit SharePoint …';
+  try{
+    await resolveIds();
+    if(st) st.textContent='Lade Tagesordnung …';
+    items = await spLoad();
+  }catch(e){
+    if(isAccessDenied(e)){ showAccessDenied(); return; }
+    throw e;   // andere Fehler an den Aufrufer (doMsLogin / init) weiterreichen
+  }
   // User-Badge
   const name = deriveName(msalAccount) || 'Konto';
   document.getElementById('userbadge').innerHTML =
