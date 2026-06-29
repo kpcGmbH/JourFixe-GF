@@ -39,7 +39,7 @@
   header.app{background:var(--black);color:#fff;padding:14px 26px;display:flex;align-items:center;gap:22px;flex-shrink:0}
   .brand{display:flex;align-items:center;gap:14px}
   .kpc-logo{height:30px;width:auto;display:block}
-  .brand .kpc-logo{color:#fff}   /* Buchstaben weiß auf schwarzem Header */
+  .brand .kpc-logo{color:#fff}
   .brand h1{font-family:var(--font-head);font-weight:400;font-size:22px;letter-spacing:1.15px;line-height:1;white-space:nowrap}
   .brand .sub{font-size:12.5px;color:var(--grey-light);letter-spacing:1.2px;text-transform:uppercase;margin-top:3px}
   .brand .stack{display:flex;flex-direction:column}
@@ -59,27 +59,27 @@
   .userbadge .av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .userbadge .out{background:none;border:none;color:var(--grey-light);cursor:pointer;font-size:12px;text-decoration:underline}
   .userbadge .out:hover{color:#fff}
-  .sync{font-size:12px;color:var(--grey-light);display:flex;align-items:center;gap:6px;min-width:90px}
+  .sync{font-size:12px;color:var(--grey-light);display:flex;align-items:center;gap:6px;min-width:84px}
   .sync .dot{width:8px;height:8px;border-radius:50%;background:#5b8a5b}
   .sync.busy .dot{background:#c79a3a;animation:pulse 1s infinite}
   .sync.err .dot{background:#b85a5a}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
   /* ---------- Board ---------- */
-  .board-wrap{flex:1;overflow-x:auto;overflow-y:hidden;padding:20px 22px 8px}
+  .board-wrap{flex:1;min-height:0;overflow-x:auto;overflow-y:hidden;padding:20px 22px 8px}
   .board{display:flex;gap:16px;height:100%;align-items:flex-start;min-height:0}
-  .col{background:var(--col-bg);border-radius:12px;width:286px;min-width:286px;display:flex;flex-direction:column;max-height:100%;border-top:4px solid var(--col-color,var(--grey))}
-  .col-head{padding:13px 15px 10px;display:flex;align-items:center;gap:9px}
+  .col{background:var(--col-bg);border-radius:12px;width:286px;min-width:286px;display:flex;flex-direction:column;max-height:100%;min-height:0;border-top:4px solid var(--col-color,var(--grey))}
+  .col-head{padding:13px 15px 10px;display:flex;align-items:center;gap:9px;flex-shrink:0}
   .col-dot{width:10px;height:10px;border-radius:50%;background:var(--col-color);flex-shrink:0}
   .col-head h2{font-family:var(--font-body);font-weight:700;font-size:14px;letter-spacing:.8px;text-transform:uppercase;color:var(--text)}
   .col-head .count{margin-left:auto;background:rgba(125,125,125,.18);color:var(--grey-dark);border-radius:20px;font-size:12.5px;padding:2px 9px;font-weight:700}
-  .col-body{flex:1;overflow-y:auto;padding:4px 11px 11px;display:flex;flex-direction:column;gap:10px}
+  .col-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:4px 11px 11px;display:flex;flex-direction:column;gap:10px}
   .col-body.dragover{background:rgba(137,86,19,.12);outline:2px dashed var(--accent);outline-offset:-6px;border-radius:8px}
-  .col-add{margin:0 11px 12px;padding:9px;border:1px dashed #b3a89a80;border-radius:8px;color:var(--text-soft);font-size:13.5px;text-align:center;cursor:pointer;letter-spacing:.5px;transition:.15s}
+  .col-add{margin:0 11px 12px;padding:9px;border:1px dashed #b3a89a80;border-radius:8px;color:var(--text-soft);font-size:13.5px;text-align:center;cursor:pointer;letter-spacing:.5px;transition:.15s;flex-shrink:0}
   .col-add:hover{background:rgba(125,125,125,.08);color:var(--accent)}
 
   /* ---------- Card ---------- */
-  .card{background:var(--card-bg);border-radius:9px;box-shadow:var(--shadow);padding:12px 13px 11px;cursor:grab;position:relative;overflow:hidden;border-left:4px solid var(--cat-color,var(--grey));transition:box-shadow .15s}
+  .card{flex:0 0 auto;background:var(--card-bg);border-radius:9px;box-shadow:var(--shadow);padding:12px 13px 11px;cursor:pointer;position:relative;overflow:hidden;border-left:4px solid var(--cat-color,var(--grey));transition:box-shadow .15s}
   .card:hover{box-shadow:var(--shadow-lg)}
   .card.dragging{opacity:.5}
   .card .cat-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#fff;background:var(--cat-color);border-radius:4px;padding:2px 7px;margin-bottom:7px}
@@ -94,31 +94,91 @@
   .due svg{width:12px;height:12px}
   .due.overdue{color:#c45a5a;font-weight:700}
   .owner{margin-left:auto;width:27px;height:27px;border-radius:50%;background:var(--grey);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.3px}
-  .card .grip{position:absolute;top:9px;right:10px;color:#cfc8c0;opacity:0;transition:.15s}
-  .card:hover .grip{opacity:1}
-  .card .grip svg{width:15px;height:15px}
+  .badges{display:flex;align-items:center;gap:11px;margin-top:9px;color:var(--grey);font-size:12px}
+  .badges span{display:inline-flex;align-items:center;gap:3px}
+  .badges svg{width:13px;height:13px}
+  .badges .act{color:var(--accent)}
+  .badges .act.overdue{color:#c45a5a}
 
-  /* ---------- Modal ---------- */
-  .overlay{position:fixed;inset:0;background:rgba(20,16,12,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
-  .overlay.open{display:flex}
-  .modal{background:var(--white);border-radius:14px;width:560px;max-width:100%;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
-  .modal-head{padding:20px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
-  .modal-head h2{font-family:var(--font-head);font-weight:400;font-size:21px;letter-spacing:1.15px;color:var(--text)}
-  .modal-head .x{margin-left:auto;cursor:pointer;color:var(--grey);font-size:24px;line-height:1;background:none;border:none}
-  .modal-head .x:hover{color:var(--text)}
-  .modal-body{padding:20px 24px}
-  .field{margin-bottom:16px}
-  .field label{display:block;font-size:12.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-soft);margin-bottom:6px}
-  .field input,.field select,.field textarea{width:100%;font-family:var(--font-body);font-size:15px;font-weight:300;letter-spacing:.3px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;background:var(--paper);color:var(--text)}
-  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
-  .field textarea{resize:vertical;min-height:78px;line-height:1.45}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .modal-foot{padding:14px 24px 22px;display:flex;gap:10px;align-items:center}
-  .modal-foot .del{margin-right:auto;color:#b85a5a;background:none;border:none;cursor:pointer;font-family:var(--font-body);font-size:14px;letter-spacing:.4px}
-  .modal-foot .del:hover{text-decoration:underline}
-  button.solid{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-family:var(--font-body);font-size:14.5px;letter-spacing:.6px;cursor:pointer}
+  /* ---------- Detail (Odoo-Stil) ---------- */
+  .detail{position:fixed;inset:0;background:rgba(20,16,12,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
+  .detail.open{display:flex}
+  .dcard{background:var(--paper);border-radius:14px;width:min(1120px,97vw);height:min(900px,93vh);display:flex;flex-direction:column;box-shadow:var(--shadow-lg);overflow:hidden}
+  .dtop{background:var(--card-bg);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;flex-direction:column;gap:12px;flex-shrink:0}
+  .dtop-row{display:flex;align-items:center;gap:12px}
+  .dtop .tnum{font-size:12.5px;color:var(--grey);letter-spacing:.5px}
+  .dtop .x{margin-left:auto;cursor:pointer;color:var(--grey);font-size:26px;line-height:1;background:none;border:none}
+  .dtop .x:hover{color:var(--text)}
+  /* Statusleiste */
+  .stagebar{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+  .stage{position:relative;flex:1;min-width:120px;padding:9px 14px 9px 22px;font-size:12.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-soft);background:var(--card-bg);cursor:pointer;border:none;text-align:left;white-space:nowrap;transition:.12s}
+  .stage:not(:last-child){border-right:1px solid var(--line)}
+  .stage:hover{background:var(--beige-soft)}
+  .stage.active{background:var(--accent);color:#fff}
+  .stage.done{color:var(--accent)}
+  .dbody{flex:1;min-height:0;display:flex;overflow:hidden}
+  .dmain{flex:1 1 60%;min-width:0;overflow-y:auto;padding:20px 24px}
+  .dside{flex:1 1 40%;max-width:430px;min-width:330px;border-left:1px solid var(--line);background:var(--card-bg);overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+  @media (max-width:820px){ .dbody{flex-direction:column} .dside{max-width:none;border-left:none;border-top:1px solid var(--line)} }
+  .dtitle{font-family:var(--font-head);font-weight:400;font-size:25px;letter-spacing:.8px;color:var(--text);width:100%;border:none;background:transparent;outline:none;padding:2px 0;margin-bottom:14px}
+  .dtitle:focus{border-bottom:1px solid var(--accent)}
+  .fgrid{display:grid;grid-template-columns:140px 1fr;gap:10px 14px;align-items:center;margin-bottom:20px}
+  .fgrid label{font-size:12.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-soft)}
+  .fgrid input,.fgrid select{font-family:var(--font-body);font-size:14.5px;font-weight:300;border:1px solid transparent;border-radius:6px;padding:6px 8px;background:transparent;color:var(--text);outline:none;width:100%}
+  .fgrid input:hover,.fgrid select:hover{background:var(--beige-soft)}
+  .fgrid input:focus,.fgrid select:focus{border-color:var(--accent);background:var(--paper)}
+  .dsec-label{font-size:12.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-soft);margin:6px 0 7px}
+  .ddesc{width:100%;min-height:120px;font-family:var(--font-body);font-size:14.5px;font-weight:300;line-height:1.5;border:1px solid var(--line);border-radius:8px;padding:11px 12px;background:var(--card-bg);color:var(--text);outline:none;resize:vertical}
+  .ddesc:focus{border-color:var(--accent)}
+  .dmain-foot{display:flex;gap:10px;margin-top:16px;align-items:center}
+  .dmain-foot .del{margin-left:auto;color:#b85a5a;background:none;border:none;cursor:pointer;font-size:13.5px;letter-spacing:.4px}
+  .dmain-foot .del:hover{text-decoration:underline}
+  button.solid{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-family:var(--font-body);font-size:14px;letter-spacing:.5px;cursor:pointer}
   button.solid:hover{background:var(--accent-soft)}
-  button.cancel{background:var(--beige-soft);color:var(--grey-dark);border:none;border-radius:8px;padding:10px 18px;font-family:var(--font-body);font-size:14.5px;letter-spacing:.6px;cursor:pointer}
+  button.soft{background:var(--beige-soft);color:var(--grey-dark);border:none;border-radius:8px;padding:9px 16px;font-family:var(--font-body);font-size:14px;letter-spacing:.5px;cursor:pointer}
+
+  /* Chatter */
+  .ctabs{display:flex;gap:6px}
+  .ctab{flex:1;font-family:var(--font-body);font-size:13px;letter-spacing:.4px;padding:8px 6px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--text-soft);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px}
+  .ctab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .ctab svg{width:14px;height:14px}
+  .cbox{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper);display:none}
+  .cbox.show{display:block}
+  .cbox textarea{width:100%;min-height:58px;border:none;background:transparent;outline:none;font-family:var(--font-body);font-size:14px;color:var(--text);resize:vertical}
+  .cbox .crow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}
+  .cbox input[type=text],.cbox input[type=date],.cbox select{font-family:var(--font-body);font-size:13.5px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;background:var(--card-bg);color:var(--text);outline:none;width:100%}
+  .cbox .cact{display:flex;justify-content:flex-end;margin-top:8px}
+  .act-list{display:flex;flex-direction:column;gap:8px}
+  .act-item{display:flex;gap:9px;align-items:flex-start;background:var(--beige-soft);border-radius:8px;padding:9px 11px}
+  .act-item .ai-ic{color:var(--accent);flex-shrink:0;margin-top:1px}
+  .act-item .ai-ic svg{width:16px;height:16px}
+  .act-item .ai-main{flex:1;min-width:0}
+  .act-item .ai-due{font-size:12px;font-weight:700;color:var(--accent)}
+  .act-item .ai-due.overdue{color:#c45a5a}
+  .act-item .ai-txt{font-size:14px;color:var(--text);margin:1px 0}
+  .act-item .ai-meta{font-size:12px;color:var(--text-soft)}
+  .act-item .ai-done{background:none;border:none;color:#3f6b41;cursor:pointer;font-size:12.5px;display:inline-flex;align-items:center;gap:4px;padding:2px 0}
+  .act-item .ai-done:hover{text-decoration:underline}
+  .act-item .ai-x{background:none;border:none;color:var(--grey-light);cursor:pointer;font-size:16px;line-height:1}
+  .timeline{display:flex;flex-direction:column;gap:0;margin-top:4px}
+  .tl-day{font-size:11.5px;color:var(--grey-light);letter-spacing:.5px;text-align:center;margin:10px 0 8px;position:relative}
+  .ev{display:flex;gap:10px;padding:7px 0}
+  .ev .ev-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;background:var(--grey)}
+  .ev .ev-av.sys{background:var(--beige);color:var(--grey-dark)}
+  .ev-main{flex:1;min-width:0}
+  .ev-head{font-size:13px;color:var(--text)}
+  .ev-head b{font-weight:700}
+  .ev-time{font-size:11.5px;color:var(--grey-light);margin-left:6px}
+  .ev-text{font-size:14px;color:var(--text);margin-top:2px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+  .ev-note{background:var(--beige-soft);border-radius:8px;padding:8px 10px;margin-top:3px}
+  .ev-status{font-size:13px;color:var(--text-soft)}
+  .ev-status .chip{font-weight:700;color:var(--accent)}
+  .ev-files{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+  .ev-files a{display:block;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--card-bg);text-decoration:none;color:var(--text-soft);font-size:12px}
+  .ev-files img{width:78px;height:78px;object-fit:cover;display:block;background:var(--beige-soft)}
+  .ev-files .filechip{padding:9px 11px;display:flex;align-items:center;gap:6px;max-width:160px}
+  .ev-files .filechip svg{width:15px;height:15px;flex-shrink:0}
+  .ev-files .filechip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   footer.bar{flex-shrink:0;padding:7px 24px;background:var(--col-bg);border-top:1px solid var(--line);font-size:12px;color:var(--text-soft);letter-spacing:.5px;display:flex;align-items:center;gap:16px}
   footer.bar .claim{font-family:var(--font-head);font-style:italic;letter-spacing:.8px}
@@ -128,7 +188,7 @@
   /* ---------- Login ---------- */
   .login{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;align-items:center;justify-content:center;padding:24px}
   .login .panel{background:var(--white);border-radius:16px;padding:42px 40px;max-width:430px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
-  .login .kpc-logo{height:56px;margin:0 auto 22px;color:var(--text)}  /* dunkel auf weißem Panel, hell im Dark-Mode */
+  .login .kpc-logo{height:56px;margin:0 auto 22px;color:var(--text)}
   .login h1{font-family:var(--font-head);font-weight:400;font-size:26px;letter-spacing:1.15px;margin-bottom:8px;color:var(--text)}
   .login .sub{font-size:14px;color:var(--text-soft);letter-spacing:.5px;margin-bottom:28px;line-height:1.5}
   .login button{font-family:var(--font-body);font-size:16px;letter-spacing:.6px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:13px 26px;cursor:pointer;display:inline-flex;align-items:center;gap:11px;width:100%;justify-content:center;transition:.15s}
@@ -142,6 +202,32 @@
   .login .ms-logo i:nth-child(4){background:#ffb900}
   .login .status{margin-top:18px;font-size:13.5px;color:var(--text-soft);min-height:18px;letter-spacing:.3px}
   .login .claim{margin-top:26px;font-family:var(--font-head);font-style:italic;font-size:13px;color:var(--grey-light)}
+
+  /* Aktivitäten-Panel ("Meine Aufgaben") */
+  .actpanel{position:fixed;inset:0;background:rgba(20,16,12,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:65;padding:5vh 18px}
+  .actpanel.open{display:flex}
+  .apcard{background:var(--paper);border-radius:14px;width:min(980px,97vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);overflow:hidden}
+  .aphead{background:var(--card-bg);border-bottom:1px solid var(--line);padding:15px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .aphead h2{font-family:var(--font-head);font-weight:400;font-size:21px;letter-spacing:1.1px;color:var(--text)}
+  .aphead .x{margin-left:auto;cursor:pointer;color:var(--grey);font-size:26px;line-height:1;background:none;border:none}
+  .chip-f{font-family:var(--font-body);font-size:13px;letter-spacing:.4px;border:1px solid var(--line);border-radius:20px;padding:6px 13px;background:var(--paper);color:var(--text-soft);cursor:pointer}
+  .chip-f.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .apbody{overflow-y:auto}
+  .actrow{display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid var(--line);cursor:pointer}
+  .actrow:hover{background:var(--beige-soft)}
+  .ar-main{flex:1;min-width:0}
+  .ar-task{font-size:14.5px;color:var(--text)}
+  .ar-tick{font-size:12.5px;color:var(--text-soft);margin-top:2px;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ar-tick .cat{display:inline-block;width:9px;height:9px;border-radius:3px;flex-shrink:0}
+  .ar-due{font-size:13px;font-weight:700;white-space:nowrap;min-width:104px;text-align:right}
+  .ar-due.over{color:#c45a5a}.ar-due.today{color:var(--accent)}.ar-due.fut{color:var(--text-soft)}
+  .ar-acts{display:flex;gap:6px}
+  .ar-acts button{font-family:var(--font-body);font-size:13px;border:none;background:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:6px;white-space:nowrap}
+  .ar-acts .done{color:#3f6b41}.ar-acts .done:hover{background:#e3ece3}
+  .ar-acts .open{color:var(--accent)}.ar-acts .open:hover{background:var(--beige-soft)}
+  .ap-empty{padding:36px;text-align:center;color:var(--grey-light);font-style:italic}
+  #actBtn .pill{background:#b85a5a;color:#fff;border-radius:20px;font-size:11px;font-weight:700;padding:1px 7px;margin-left:1px}
+  @media (max-width:680px){ .ar-acts .open{display:none} .ar-tick{max-width:150px} }
 
   ::-webkit-scrollbar{height:10px;width:10px}
   ::-webkit-scrollbar-thumb{background:#cdc4ba80;border-radius:6px}
@@ -185,6 +271,9 @@
     <button class="btn ghost" id="reloadBtn" title="Neu laden">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-2.6-6.4M21 3v5h-5"/></svg>
     </button>
+    <button class="btn ghost" id="actBtn" title="Meine Aufgaben / Aktivitäten">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Aufgaben<span class="pill" id="actCount" style="display:none"></span>
+    </button>
     <button class="btn primary" id="newBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>Neuer Punkt
     </button>
@@ -200,54 +289,32 @@
   <span class="right">Gespeichert in SharePoint · kpc Geschäftsführung</span>
 </footer>
 
-<!-- ===== Modal ===== -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="modalTitle">Neuer Tagesordnungspunkt</h2>
-      <button class="x" id="closeModal">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="field"><label>Titel</label><input id="f-title" type="text" placeholder="Worum geht es?"></div>
-      <div class="field"><label>Beschreibung / Notiz</label><textarea id="f-desc" placeholder="Hintergrund, Entscheidung, To-dos …"></textarea></div>
-      <div class="row2">
-        <div class="field"><label>Kategorie</label><select id="f-cat"></select></div>
-        <div class="field"><label>Status / Spalte</label><select id="f-status"></select></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>Priorität</label>
-          <select id="f-prio"><option value="niedrig">Niedrig</option><option value="mittel" selected>Mittel</option><option value="hoch">Hoch</option></select>
-        </div>
-        <div class="field"><label>Verantwortlich</label><input id="f-owner" type="text" placeholder="z. B. AH, JW, Name"></div>
-      </div>
-      <div class="field"><label>Fällig bis (optional)</label><input id="f-due" type="date"></div>
-    </div>
-    <div class="modal-foot">
-      <button class="del" id="deleteBtn" style="display:none">Löschen</button>
-      <button class="cancel" id="cancelBtn">Abbrechen</button>
-      <button class="solid" id="saveBtn">Speichern</button>
-    </div>
-  </div>
+<!-- ===== Detail (Odoo-Stil) ===== -->
+<div class="detail" id="detail">
+  <div class="dcard" id="dcard"></div>
 </div>
+<input type="file" id="fileInput" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" multiple hidden>
+
+<!-- ===== Aktivitäten-Panel ===== -->
+<div class="actpanel" id="activities"><div class="apcard" id="apcard"></div></div>
 
 <script>
 /* ============================================================
-   KONFIGURATION – nach Entra/SharePoint-Setup ausfüllen
-   (siehe SETUP.md). tenantId & spHost gelten KPC-weit.
+   KONFIGURATION
    ============================================================ */
 const MS_CONFIG = {
-  tenantId: 'cba1b1fc-4a80-4da1-a7f1-e3e4614056eb',          // KPC-Tenant (fest – nicht ändern)
-  clientId: '32d7b45e-2ff0-45e1-8c5f-1b9c315fa39e',          // Entra-App "JourFixe_GF"
-  spHost:   'kpcfulda.sharepoint.com',                        // KPC-Tenant (fest – nicht ändern)
-  sitePath: '/sites/JourFixe_GF',                             // ← Pfad der SharePoint-Site (mit Unterstrich)
-  listName: 'Agenda'                                          // ← Name der SharePoint-Liste (Anleitung Schritt 2)
+  tenantId: 'cba1b1fc-4a80-4da1-a7f1-e3e4614056eb',
+  clientId: '32d7b45e-2ff0-45e1-8c5f-1b9c315fa39e',
+  spHost:   'kpcfulda.sharepoint.com',
+  sitePath: '/sites/JourFixe_GF',
+  listName: 'Agenda'
 };
 const GRAPH = 'https://graph.microsoft.com/v1.0';
-const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All'];     // delegiert: App handelt nur als angemeldeter Nutzer
-const USE_REDIRECT = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-  || (typeof window.matchMedia==='function' && window.matchMedia('(pointer: coarse)').matches);
+const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All'];
+// Immer Weiterleitungs-Login (robust gegen blockierte/verschachtelte Popups in
+// kleinen oder eingebetteten Fenstern – z. B. block_nested_popups/popup_window_error).
+const USE_REDIRECT = true;
 
-/* ---------------- Fachliche Konfiguration ---------------- */
 const COLUMNS = [
   { key:'gesammelt',   title:'Gesammelt',      color:'#928474', hint:'Themen, die noch aufgenommen werden' },
   { key:'agenda',      title:'Auf der Agenda', color:'#895613', hint:'Für den nächsten Jour Fixe vorgemerkt' },
@@ -269,67 +336,57 @@ const CATEGORIES = [
   { key:'sonstiges', name:'Sonstiges',                color:'#928474' },
 ];
 const catMap = Object.fromEntries(CATEGORIES.map(c=>[c.key,c]));
+const colMap = Object.fromEntries(COLUMNS.map(c=>[c.key,c]));
 
-/* ---------------- State ---------------- */
-let items = [];          // {id, title, desc, cat, status, prio, owner, due, created}
-let editingId = null;
+let items = [];
+let detailId = null;     // aktuell geöffnetes Ticket (null=keins)
+let activeTab = 'note';  // Chatter-Tab
+let actMine = true, actDueOnly = false;  // Filter im Aufgaben-Panel
+let PEOPLE = [];   // [{id,name,mail}] aus der M365-Gruppe der Site (für "Zugewiesen an")
+let MEID = '';     // eigene User-ID
 
 /* ============================================================
-   BACKEND: Microsoft 365 (MSAL + SharePoint-Liste via Graph)
+   BACKEND: MSAL + Microsoft Graph
    ============================================================ */
 let msalApp = null, msalAccount = null;
-const SPIDS = { siteId:null, listId:null };
+const SPIDS = { siteId:null, listId:null, driveId:null };
 
 async function msalInit(){
   msalApp = new msal.PublicClientApplication({
-    auth:{
-      clientId: MS_CONFIG.clientId,
-      authority: 'https://login.microsoftonline.com/' + MS_CONFIG.tenantId,
-      redirectUri: (window.location.origin + window.location.pathname).replace(/index\.html$/, '')
-    },
+    auth:{ clientId:MS_CONFIG.clientId, authority:'https://login.microsoftonline.com/'+MS_CONFIG.tenantId,
+      redirectUri:(window.location.origin+window.location.pathname).replace(/index\.html$/,'') },
     cache:{ cacheLocation:'localStorage' }
   });
-  if(typeof msalApp.initialize === 'function') await msalApp.initialize();
+  if(typeof msalApp.initialize==='function') await msalApp.initialize();
   const resp = await msalApp.handleRedirectPromise();
   if(resp && resp.account) msalAccount = resp.account;
-  if(!msalAccount){ const a = msalApp.getAllAccounts(); if(a.length) msalAccount = a[0]; }
+  if(!msalAccount){ const a=msalApp.getAllAccounts(); if(a.length) msalAccount=a[0]; }
   if(msalAccount) msalApp.setActiveAccount(msalAccount);
   return msalAccount;
 }
-// Popup blockiert? -> dann auf Redirect-Flow ausweichen
-function isPopupBlocked(e){
-  const m = (((e&&e.errorCode)||'')+' '+((e&&e.message)||''));
-  return /popup_window_error|empty_window_error|popup.*block/i.test(m);
-}
+function isPopupBlocked(e){ const m=(((e&&e.errorCode)||'')+' '+((e&&e.message)||'')); return /popup_window_error|empty_window_error|popup.*block/i.test(m); }
 async function msalLogin(){
   if(!msalApp){ if(typeof msal==='undefined') throw new Error('MSAL nicht geladen (Internet/CDN prüfen)'); await msalInit(); }
   if(USE_REDIRECT){ await msalApp.loginRedirect({ scopes:GRAPH_SCOPES }); return null; }
   try{
     const res = await msalApp.loginPopup({ scopes:GRAPH_SCOPES, prompt:'select_account' });
     msalAccount = res.account; msalApp.setActiveAccount(msalAccount); return msalAccount;
-  }catch(e){
-    if(isPopupBlocked(e)){ await msalApp.loginRedirect({ scopes:GRAPH_SCOPES }); return null; }
-    throw e;
-  }
+  }catch(e){ if(isPopupBlocked(e)){ await msalApp.loginRedirect({ scopes:GRAPH_SCOPES }); return null; } throw e; }
 }
 async function getToken(){
   try{ return (await msalApp.acquireTokenSilent({ scopes:GRAPH_SCOPES, account:msalAccount })).accessToken; }
   catch(e){
     if(USE_REDIRECT){ await msalApp.acquireTokenRedirect({ scopes:GRAPH_SCOPES }); throw e; }
-    try{
-      const res = await msalApp.acquireTokenPopup({ scopes:GRAPH_SCOPES }); msalAccount = res.account; return res.accessToken;
-    }catch(e2){
-      if(isPopupBlocked(e2)){ await msalApp.acquireTokenRedirect({ scopes:GRAPH_SCOPES }); throw e2; }
-      throw e2;
-    }
+    try{ const res=await msalApp.acquireTokenPopup({ scopes:GRAPH_SCOPES }); msalAccount=res.account; return res.accessToken; }
+    catch(e2){ if(isPopupBlocked(e2)){ await msalApp.acquireTokenRedirect({ scopes:GRAPH_SCOPES }); throw e2; } throw e2; }
   }
 }
 async function graph(path, opts){
   opts = opts || {};
   const token = await getToken();
   const headers = Object.assign({ Authorization:'Bearer '+token }, opts.headers||{});
-  const res = await fetch(GRAPH + path, Object.assign({}, opts, { headers }));
-  if(!res.ok){ const t = await res.text(); throw new Error('Graph '+res.status+': '+t.substring(0,300)); }
+  const res = await fetch(GRAPH+path, Object.assign({}, opts, { headers }));
+  if(!res.ok){ const t=await res.text(); throw new Error('Graph '+res.status+': '+t.substring(0,300)); }
   return res;
 }
 async function resolveIds(){
@@ -339,25 +396,61 @@ async function resolveIds(){
     encodeURIComponent("displayName eq '"+MS_CONFIG.listName+"'"))).json();
   if(!lists.value || !lists.value.length) throw new Error('Liste "'+MS_CONFIG.listName+'" nicht gefunden');
   SPIDS.listId = lists.value[0].id;
+  try{ const drv = await (await graph('/sites/'+SPIDS.siteId+'/drive')).json(); SPIDS.driveId = drv.id; }
+  catch(e){ SPIDS.driveId = null; console.warn('Dokumentbibliothek nicht erreichbar – Anhänge deaktiviert:', e.message); }
 }
 
-/* ---- CRUD auf der SharePoint-Liste ---- */
+// Personen ("Zugewiesen an") aus der M365-Gruppe der Site laden.
+// Nutzt ein separates Token mit GroupMember.Read.All; ohne diese (admin-konsentierte)
+// Berechtigung bleibt PEOPLE leer -> die Felder fallen automatisch auf Freitext zurück.
+async function graphTok(token, path){
+  const res = await fetch(GRAPH+path, { headers:{ Authorization:'Bearer '+token } });
+  if(!res.ok){ const t=await res.text(); throw new Error('Graph '+res.status+': '+t.substring(0,200)); }
+  return res.json();
+}
+async function loadPeople(){
+  PEOPLE=[]; MEID='';
+  let token;
+  try{ token=(await msalApp.acquireTokenSilent({ scopes:['GroupMember.Read.All'], account:msalAccount })).accessToken; }
+  catch(e){ console.warn('Personen: Berechtigung GroupMember.Read.All noch nicht erteilt – Freitext-Fallback.'); return; }
+  try{
+    const nick=MS_CONFIG.sitePath.split('/').filter(Boolean).pop();
+    const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
+    if(!g.value || !g.value.length){ console.warn('Personen: M365-Gruppe "'+nick+'" nicht gefunden.'); return; }
+    const gid=g.value[0].id;
+    let url='/groups/'+gid+'/members/microsoft.graph.user?$select=id,displayName,mail,userPrincipalName&$top=100';
+    while(url){
+      const m=await graphTok(token,url);
+      (m.value||[]).forEach(u=>{ if(u.displayName) PEOPLE.push({ id:u.id, name:u.displayName, mail:((u.mail||u.userPrincipalName||'')+'').toLowerCase() }); });
+      url=m['@odata.nextLink'] ? m['@odata.nextLink'].replace(GRAPH,'') : null;
+    }
+    PEOPLE.sort((a,b)=>a.name.localeCompare(b.name));
+    const un=(((msalAccount&&msalAccount.username)||'')+'').toLowerCase();
+    const me=PEOPLE.find(p=>p.mail===un) || PEOPLE.find(p=>p.name.toLowerCase()===(ME||'').toLowerCase());
+    if(me){ MEID=me.id; ME=me.name; }   // eigenen offiziellen Anzeigenamen übernehmen
+  }catch(e){ console.warn('Personenliste nicht geladen (Freitext-Fallback):', e.message); PEOPLE=[]; }
+}
+
+/* ---- Liste (Agenda) ---- */
 function packData(it){
-  return JSON.stringify({ desc:it.desc||'', cat:it.cat||'sonstiges', status:it.status||'gesammelt',
-    prio:it.prio||'mittel', owner:it.owner||'', due:it.due||'', created:it.created||'' });
+  return JSON.stringify({
+    desc:it.desc||'', cat:it.cat||'sonstiges', status:it.status||'gesammelt', prio:it.prio||'mittel',
+    owner:it.owner||'', bereich:it.bereich||'', reportedBy:it.reportedBy||'', reportedAt:it.reportedAt||'',
+    due:it.due||'', created:it.created||'', log:it.log||[], activities:it.activities||[]
+  });
+}
+function rowFromFields(it, f){
+  let d={}; try{ d=f.data?JSON.parse(f.data):{}; }catch(e){ d={}; }
+  return { id:it.id, title:f.Title||'(ohne Titel)', desc:d.desc||'', cat:d.cat||'sonstiges',
+    status:d.status||'gesammelt', prio:d.prio||'mittel', owner:d.owner||'', bereich:d.bereich||'',
+    reportedBy:d.reportedBy||'', reportedAt:d.reportedAt||'', due:d.due||'',
+    created:d.created||it.createdDateTime||'', log:Array.isArray(d.log)?d.log:[], activities:Array.isArray(d.activities)?d.activities:[] };
 }
 async function spLoad(){
-  const out = [];
-  let url = '/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items?$expand=fields&$top=2000';
+  const out=[]; let url='/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items?$expand=fields&$top=2000';
   while(url){
     const data = await (await graph(url)).json();
-    (data.value||[]).forEach(it=>{
-      const f = it.fields||{};
-      let d = {}; try{ d = f.data ? JSON.parse(f.data) : {}; }catch(e){ d = {}; }
-      out.push({ id:it.id, title:f.Title||'(ohne Titel)', desc:d.desc||'', cat:d.cat||'sonstiges',
-        status:d.status||'gesammelt', prio:d.prio||'mittel', owner:d.owner||'', due:d.due||'',
-        created:d.created||it.createdDateTime||'' });
-    });
+    (data.value||[]).forEach(it=> out.push(rowFromFields(it, it.fields||{})));
     url = data['@odata.nextLink'] ? data['@odata.nextLink'].replace(GRAPH,'') : null;
   }
   return out;
@@ -375,8 +468,35 @@ async function spUpdate(it){
     body: JSON.stringify({ Title:it.title, data:packData(it) })
   });
 }
-async function spDelete(id){
-  await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items/'+id, { method:'DELETE' });
+async function spDelete(id){ await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items/'+id, { method:'DELETE' }); }
+// Vor dem Speichern Log/Aktivitäten mit dem Server-Stand zusammenführen (verhindert verlorene Notizen)
+async function saveMerge(it){
+  if(it.id && !String(it.id).startsWith('tmp')){
+    try{
+      const f = await (await graph('/sites/'+SPIDS.siteId+'/lists/'+SPIDS.listId+'/items/'+it.id+'/fields')).json();
+      let d={}; try{ d=f.data?JSON.parse(f.data):{}; }catch(e){}
+      const mergeById=(a,b)=>{ const m={}; (a||[]).concat(b||[]).forEach(x=>{ if(x&&x.id) m[x.id]=x; }); return Object.values(m); };
+      it.log = mergeById(d.log, it.log).sort((x,y)=>(x.ts||'').localeCompare(y.ts||''));
+      it.activities = mergeById(d.activities, it.activities);
+    }catch(e){ console.warn('Merge übersprungen:', e.message); }
+  }
+  await spUpdate(it);
+}
+
+/* ---- Dateien (Standard-Dokumentbibliothek) ---- */
+function encPath(p){ return String(p).split('/').map(encodeURIComponent).join('/'); }
+function safeName(s){ return String(s==null?'':s).replace(/[\\/:*?"<>|#%]/g,'-').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'').slice(0,90)||'_'; }
+async function spUploadFile(itemId, file){
+  if(!SPIDS.driveId) throw new Error('Keine Dokumentbibliothek verfügbar');
+  const path = 'JourFixe-Anhaenge/'+itemId+'/'+safeName(file.name);
+  await graph('/sites/'+SPIDS.siteId+'/drives/'+SPIDS.driveId+'/root:/'+encPath(path)+':/content', {
+    method:'PUT', headers:{'Content-Type': file.type||'application/octet-stream'}, body:file
+  });
+  return path;
+}
+async function spFileUrls(path){
+  const meta = await (await graph('/sites/'+SPIDS.siteId+'/drives/'+SPIDS.driveId+'/root:/'+encPath(path))).json();
+  return { download:meta['@microsoft.graph.downloadUrl']||'', web:meta.webUrl||'' };
 }
 
 /* ---- Sync-Indikator ---- */
@@ -388,7 +508,7 @@ function setSync(state, txt){
 async function withSync(fn){
   setSync('busy');
   try{ await fn(); setSync('ok'); }
-  catch(e){ console.error(e); setSync('err', 'Fehler – siehe Konsole'); alert('Aktion fehlgeschlagen:\n'+(e.message||e)); }
+  catch(e){ console.error(e); setSync('err','Fehler – siehe Konsole'); alert('Aktion fehlgeschlagen:\n'+(e.message||e)); }
 }
 
 /* ============================================================
@@ -396,112 +516,108 @@ async function withSync(fn){
    ============================================================ */
 function deriveName(account){
   if(!account) return '';
-  let n = (account.name || account.username || '').trim();
-  if(n.includes(',')){ const p=n.split(',').map(s=>s.trim()); if(p.length===2&&p[0]&&p[1]) n = p[1]+' '+p[0]; }
-  if(/@/.test(n)){ n = n.split('@')[0].replace(/[._]+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase()); }
+  let n=(account.name||account.username||'').trim();
+  if(n.includes(',')){ const p=n.split(',').map(s=>s.trim()); if(p.length===2&&p[0]&&p[1]) n=p[1]+' '+p[0]; }
+  if(/@/.test(n)){ n=n.split('@')[0].replace(/[._]+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase()); }
   return n;
 }
-function initials(name){
-  if(!name) return '–';
-  const p = name.trim().split(/\s+/);
-  return (p.length===1 ? p[0].slice(0,2) : p[0][0]+p[p.length-1][0]).toUpperCase();
-}
+function initials(name){ if(!name) return '–'; const p=name.trim().split(/\s+/); return (p.length===1?p[0].slice(0,2):p[0][0]+p[p.length-1][0]).toUpperCase(); }
+let ME = '';
 async function doMsLogin(){
   const btn=document.getElementById('loginBtn'), st=document.getElementById('loginStatus');
-  try{
-    btn.disabled=true; st.textContent='Anmeldung läuft …';
-    await msalLogin();
-    if(msalAccount) await onLoggedIn();   // Popup-Fall; bei Redirect navigiert die Seite weg
-  }catch(e){
-    btn.disabled=false;
+  try{ btn.disabled=true; st.textContent='Anmeldung läuft …'; await msalLogin(); if(msalAccount) await onLoggedIn(); }
+  catch(e){ btn.disabled=false;
     const sig=((e&&e.errorCode)||'')+' '+((e&&e.message)||'');
-    if(/user_cancelled|user_canceled/i.test(sig)) st.textContent='Anmeldung abgebrochen – bitte erneut versuchen.';
-    else st.textContent='Anmeldung fehlgeschlagen: '+(e.message||e);
-    console.error(e);
-  }
+    st.textContent=/user_cancelled|user_canceled/i.test(sig)?'Anmeldung abgebrochen – bitte erneut versuchen.':'Anmeldung fehlgeschlagen: '+(e.message||e);
+    console.error(e); }
 }
-// 403 / Zugriff verweigert (KPC-Konto, aber nicht Mitglied der GF-Site)
-function isAccessDenied(e){
-  const m = ((e&&e.message)||'')+'';
-  return /Graph 403|Graph 401|"code":\s*"accessDenied"|access ?denied|forbidden|unauthorized/i.test(m);
-}
+function isAccessDenied(e){ const m=((e&&e.message)||'')+''; return /Graph 403|Graph 401|"code":\s*"accessDenied"|access ?denied|forbidden|unauthorized/i.test(m); }
 function showAccessDenied(){
-  const ov=document.getElementById('loginOv');
-  ov.style.display='flex';
-  const wer = esc(deriveName(msalAccount) || (msalAccount&&msalAccount.username) || 'dieses Konto');
+  const ov=document.getElementById('loginOv'); ov.style.display='flex';
+  const wer=esc(deriveName(msalAccount)||(msalAccount&&msalAccount.username)||'dieses Konto');
   ov.querySelector('.panel').innerHTML = `
     <svg class="kpc-logo" viewBox="0 0 149.8 181" xmlns="http://www.w3.org/2000/svg" aria-label="kpc"><path fill="currentColor" d="M10.8,81.5c5-7.4,17.7-25.3,24.6-35.6h12.1c-6.7,9.5-13.9,19.2-20.9,28.8l23,46.7H37.3l-18.1-38c-2,2.8-6.1,8.4-8.4,11.2v26.7H0C0,80.9,0,40.4,0,0c3.6,0,7.2,0,10.8,0C10.8,27.2,10.8,54.3,10.8,81.5z"/><path fill="currentColor" d="M149.8,98.3c-0.3,4.1-1.9,24.4-24.2,24.4c-19.6,0-25.1-17.4-25.1-39.3c0-21.3,6.9-38.8,26.1-38.8c21.9,0,22.9,20.2,23,23.8h-11.2c-0.1-2.9-1.2-14.4-12-14.4s-14.9,12-14.9,29.3c0,18.7,4.2,30,14.3,30c10.8,0,12.2-11.1,12.8-15H149.8L149.8,98.3z"/><path fill="currentColor" d="M49.9,181V67.8c0-10.3,0-17.3-0.1-22h10.6c0.1,1.4,0.5,6.4,0.5,10.2c2.5-6.5,7.9-11.3,17.8-11.3c14.3,0,22,12.6,22,37.8c0,27.2-9.4,40.2-24.2,40.2c-9,0-13.5-4.3-15.8-9V181H49.9z M75.3,54.1c-11.7,0-14.9,11.2-14.9,29S62.1,113,74.5,113c9.9,0,15-11.6,15-30C89.6,63.9,85.2,54.1,75.3,54.1z"/><rect y="132.2" fill="#895613" width="10.8" height="48.8"/><rect x="24.9" y="132.2" fill="#676C6E" width="10.8" height="48.8"/></svg>
     <h1>Kein Zugriff</h1>
-    <div class="sub">Der Jour Fixe ist der <b>Geschäftsführung</b> vorbehalten.<br>
-      Du bist als <b>${wer}</b> angemeldet, hast aber keine Berechtigung für diesen Bereich.<br>
-      Bei Bedarf bitte an die Geschäftsführung wenden.</div>
+    <div class="sub">Der Jour Fixe ist der <b>Geschäftsführung</b> vorbehalten.<br>Du bist als <b>${wer}</b> angemeldet, hast aber keine Berechtigung für diesen Bereich.<br>Bei Bedarf bitte an die Geschäftsführung wenden.</div>
     <button onclick="signOut()">Mit anderem Konto anmelden</button>
     <div class="claim">we think, we create, we love kitchens.</div>`;
 }
 async function onLoggedIn(){
   const st=document.getElementById('loginStatus');
   if(st) st.textContent='Verbinde mit SharePoint …';
-  try{
-    await resolveIds();
-    if(st) st.textContent='Lade Tagesordnung …';
-    items = await spLoad();
-  }catch(e){
-    if(isAccessDenied(e)){ showAccessDenied(); return; }
-    throw e;   // andere Fehler an den Aufrufer (doMsLogin / init) weiterreichen
-  }
-  // User-Badge
-  const name = deriveName(msalAccount) || 'Konto';
+  try{ await resolveIds(); if(st) st.textContent='Lade Tagesordnung …'; items=await spLoad(); }
+  catch(e){ if(isAccessDenied(e)){ showAccessDenied(); return; } throw e; }
+  ME = deriveName(msalAccount)||'Konto';
+  await loadPeople();   // setzt ggf. ME auf den offiziellen Anzeigenamen + füllt das Dropdown
   document.getElementById('userbadge').innerHTML =
-    `<div class="av" title="${esc(name)}">${initials(name)}</div><span>${esc(name)}</span><button class="out" onclick="signOut()">Abmelden</button>`;
+    `<div class="av" title="${esc(ME)}">${initials(ME)}</div><span>${esc(ME)}</span><button class="out" onclick="signOut()">Abmelden</button>`;
   document.getElementById('loginOv').style.display='none';
   render();
 }
-function signOut(){
-  try{ msalApp.logoutRedirect(); }catch(e){ location.reload(); }
-}
+function signOut(){ try{ msalApp.logoutRedirect(); }catch(e){ location.reload(); } }
 
 /* ============================================================
-   RENDER
+   HILFEN
+   ============================================================ */
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function uid(){ return 'e'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function nowIso(){ return new Date().toISOString(); }
+function fmtDate(iso){ if(!iso) return ''; const p=iso.slice(0,10).split('-'); return `${p[2]}.${p[1]}.${p[0].slice(2)}`; }
+function fmtDateTime(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return fmtDate(iso);
+  const pad=n=>String(n).padStart(2,'0'); return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+function dayLabel(iso){ if(!iso) return ''; const d=new Date(iso); const pad=n=>String(n).padStart(2,'0'); return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`; }
+function isImg(mime,name){ return /^image\//.test(mime||'') || /\.(png|jpe?g|gif|webp|bmp|heic)$/i.test(name||''); }
+function isOverdue(iso,status){ return iso && status!=='erledigt' && iso < today(); }
+function nextActivity(it){ const a=(it.activities||[]).filter(x=>x.due).sort((x,y)=>x.due.localeCompare(y.due)); return a[0]||(it.activities||[])[0]||null; }
+
+/* ============================================================
+   BOARD
    ============================================================ */
 const board = document.getElementById('board');
 function render(){
-  const q = document.getElementById('search').value.trim().toLowerCase();
-  const cf = document.getElementById('catFilter').value;
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const cf=document.getElementById('catFilter').value;
   board.innerHTML=''; let shown=0;
   COLUMNS.forEach(col=>{
-    const colEl=document.createElement('div');
-    colEl.className='col'; colEl.style.setProperty('--col-color',col.color);
-    let list = items.filter(it=>it.status===col.key);
-    if(cf) list = list.filter(it=>it.cat===cf);
-    if(q) list = list.filter(it=>(it.title+' '+(it.desc||'')+' '+(it.owner||'')).toLowerCase().includes(q));
-    shown += list.length;
-    colEl.innerHTML = `
-      <div class="col-head"><span class="col-dot"></span><h2>${col.title}</h2><span class="count">${list.length}</span></div>
+    const colEl=document.createElement('div'); colEl.className='col'; colEl.style.setProperty('--col-color',col.color);
+    let list=items.filter(it=>it.status===col.key);
+    if(cf) list=list.filter(it=>it.cat===cf);
+    if(q) list=list.filter(it=>(it.title+' '+(it.desc||'')+' '+(it.owner||'')+' '+(it.bereich||'')).toLowerCase().includes(q));
+    shown+=list.length;
+    colEl.innerHTML=`<div class="col-head"><span class="col-dot"></span><h2>${col.title}</h2><span class="count">${list.length}</span></div>
       <div class="col-body" data-col="${col.key}"></div>
       <div class="col-add" data-col="${col.key}">+ Punkt hinzufügen</div>`;
-    const body = colEl.querySelector('.col-body');
+    const body=colEl.querySelector('.col-body');
     if(list.length===0){ const e=document.createElement('div'); e.className='empty-hint'; e.textContent=col.hint; body.appendChild(e); }
-    list.sort((a,b)=> (b.created||'').localeCompare(a.created||'')).forEach(it=>body.appendChild(cardEl(it)));
+    list.sort((a,b)=>(b.created||'').localeCompare(a.created||'')).forEach(it=>body.appendChild(cardEl(it)));
     body.addEventListener('dragover',e=>{e.preventDefault();body.classList.add('dragover');});
     body.addEventListener('dragleave',()=>body.classList.remove('dragover'));
-    body.addEventListener('drop',e=>{
-      e.preventDefault();body.classList.remove('dragover');
-      const id=e.dataTransfer.getData('text/plain');
-      const it=items.find(x=>String(x.id)===String(id));
-      if(it && it.status!==col.key){ it.status=col.key; render(); withSync(()=>spUpdate(it)); }
-    });
-    colEl.querySelector('.col-add').addEventListener('click',()=>openModal(null,col.key));
+    body.addEventListener('drop',e=>{ e.preventDefault();body.classList.remove('dragover');
+      const id=e.dataTransfer.getData('text/plain'); const it=items.find(x=>String(x.id)===String(id));
+      if(it && it.status!==col.key) changeStatus(it, col.key); });
+    colEl.querySelector('.col-add').addEventListener('click',()=>openDetail(null,col.key));
     board.appendChild(colEl);
   });
-  document.getElementById('stat').textContent = `${items.length} Punkte gesamt · ${shown} angezeigt`;
+  document.getElementById('stat').textContent=`${items.length} Punkte gesamt · ${shown} angezeigt`;
+  updateActBadge();
 }
 function cardEl(it){
   const cat=catMap[it.cat]||{name:'—',color:'#999'};
-  const el=document.createElement('div');
-  el.className='card'; el.style.setProperty('--cat-color',cat.color); el.draggable=true;
-  const overdue = it.due && it.status!=='erledigt' && it.due < new Date().toISOString().slice(0,10);
+  const el=document.createElement('div'); el.className='card'; el.style.setProperty('--cat-color',cat.color); el.draggable=true;
+  const overdue=isOverdue(it.due,it.status);
+  const notes=(it.log||[]).filter(e=>e.kind==='note').length;
+  const files=(it.log||[]).reduce((n,e)=>n+(e.kind==='file'?(e.files||[]).length:0),0);
+  const act=nextActivity(it);
+  let badges='';
+  if(notes||files||act){
+    badges='<div class="badges">';
+    if(notes) badges+=`<span title="Notizen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>${notes}</span>`;
+    if(files) badges+=`<span title="Anhänge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05l-9.2 9.2a5 5 0 0 1-7.1-7.1l9.2-9.2a3 3 0 0 1 4.2 4.2l-9.2 9.2a1 1 0 0 1-1.4-1.4l8.5-8.5"/></svg>${files}</span>`;
+    if(act) badges+=`<span class="act ${isOverdue(act.due,it.status)?'overdue':''}" title="Geplante Aktivität"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${act.due?fmtDate(act.due):'geplant'}</span>`;
+    badges+='</div>';
+  }
   el.innerHTML=`
-    <span class="grip"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>
     <span class="cat-tag">${cat.name}</span>
     <h3>${esc(it.title)}</h3>
     ${it.desc?`<p class="desc">${esc(it.desc)}</p>`:''}
@@ -509,83 +625,351 @@ function cardEl(it){
       <span class="prio ${it.prio}">${it.prio}</span>
       ${it.due?`<span class="due ${overdue?'overdue':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${fmtDate(it.due)}</span>`:''}
       ${it.owner?`<span class="owner" title="${esc(it.owner)}">${initials(it.owner)}</span>`:''}
-    </div>`;
+    </div>${badges}`;
   el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',it.id);el.classList.add('dragging');});
   el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-  el.addEventListener('click',()=>openModal(it.id));
+  el.addEventListener('click',()=>openDetail(it.id));
   return el;
 }
-function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y.slice(2)}`; }
+
+/* Statuswechsel (mit Historie-Eintrag) */
+function changeStatus(it, newStatus){
+  if(it.status===newStatus) return;
+  const from=colMap[it.status]?colMap[it.status].title:it.status;
+  const to=colMap[newStatus]?colMap[newStatus].title:newStatus;
+  it.status=newStatus;
+  it.log=it.log||[]; it.log.push({ id:uid(), kind:'status', from, to, author:ME, ts:nowIso() });
+  render(); if(detailId===it.id) renderDetail(it);
+  withSync(()=>saveMerge(it));
+}
 
 /* ============================================================
-   MODAL
+   DETAIL-ANSICHT (Odoo-Stil)
    ============================================================ */
-const overlay=document.getElementById('overlay');
-function openModal(id, presetStatus){
-  editingId=id;
-  const it = id ? items.find(x=>String(x.id)===String(id)) : null;
-  document.getElementById('modalTitle').textContent = it ? 'Punkt bearbeiten' : 'Neuer Tagesordnungspunkt';
-  document.getElementById('f-title').value = it?it.title:'';
-  document.getElementById('f-desc').value = it?(it.desc||''):'';
-  document.getElementById('f-cat').value = it?it.cat:CATEGORIES[0].key;
-  document.getElementById('f-status').value = it?it.status:(presetStatus||COLUMNS[0].key);
-  document.getElementById('f-prio').value = it?it.prio:'mittel';
-  document.getElementById('f-owner').value = it?(it.owner||''):'';
-  document.getElementById('f-due').value = it?(it.due||''):'';
-  document.getElementById('deleteBtn').style.display = it?'block':'none';
-  overlay.classList.add('open');
-  setTimeout(()=>document.getElementById('f-title').focus(),50);
+const detailOv=document.getElementById('detail');
+const dcard=document.getElementById('dcard');
+
+function openDetail(id, presetStatus){
+  let it = id ? items.find(x=>String(x.id)===String(id)) : null;
+  if(!it){
+    it = { id:'tmp'+Date.now(), title:'', desc:'', cat:CATEGORIES[0].key, status:presetStatus||COLUMNS[0].key,
+      prio:'mittel', owner:'', bereich:'', reportedBy:ME, reportedAt:today(), due:'', created:nowIso(),
+      log:[{ id:uid(), kind:'created', author:ME, ts:nowIso() }], activities:[], _new:true };
+    items.unshift(it);
+  }
+  detailId=it.id; activeTab='note';
+  renderDetail(it);
+  detailOv.classList.add('open');
 }
-function closeModal(){overlay.classList.remove('open');editingId=null;}
+function closeDetail(){
+  const it=items.find(x=>String(x.id)===String(detailId));
+  if(it && it._new && !it.title.trim()){ items=items.filter(x=>x!==it); }   // leeren Neu-Entwurf verwerfen
+  detailOv.classList.remove('open'); detailId=null; render();
+}
 
-document.getElementById('saveBtn').addEventListener('click',()=>{
-  const t=document.getElementById('f-title').value.trim();
-  if(!t){document.getElementById('f-title').focus();return;}
-  const data={
-    title:t, desc:document.getElementById('f-desc').value.trim(),
-    cat:document.getElementById('f-cat').value, status:document.getElementById('f-status').value,
-    prio:document.getElementById('f-prio').value, owner:document.getElementById('f-owner').value.trim(),
-    due:document.getElementById('f-due').value,
-  };
-  if(editingId){
-    const it=items.find(x=>String(x.id)===String(editingId)); Object.assign(it,data);
-    render(); closeModal(); withSync(()=>spUpdate(it));
-  } else {
-    const it={ id:'tmp'+Date.now(), created:new Date().toISOString(), ...data };
-    items.unshift(it); render(); closeModal();
-    withSync(async ()=>{ it.id = await spCreate(it); });
-  }
-});
-document.getElementById('deleteBtn').addEventListener('click',()=>{
-  if(editingId && confirm('Diesen Punkt wirklich löschen?')){
-    const id=editingId; items=items.filter(x=>String(x.id)!==String(id));
-    render(); closeModal(); withSync(()=>spDelete(id));
-  }
-});
-document.getElementById('closeModal').addEventListener('click',closeModal);
-document.getElementById('cancelBtn').addEventListener('click',closeModal);
-overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function stageBarHtml(it){
+  const idx=COLUMNS.findIndex(c=>c.key===it.status);
+  return COLUMNS.map((c,i)=>`<button class="stage ${c.key===it.status?'active':(i<idx?'done':'')}" data-st="${c.key}">${c.title}</button>`).join('');
+}
+// "Zugewiesen an": Dropdown aus PEOPLE, sonst Freitext-Fallback. Hält auch Alt-/Freitextwerte.
+function ownerSelect(id, value){
+  if(!PEOPLE.length) return `<input id="${id}" type="text" value="${esc(value)}" placeholder="Name">`;
+  const has=PEOPLE.some(p=>p.name===value);
+  let opts=`<option value="">— nicht zugewiesen —</option>`+
+    PEOPLE.map(p=>`<option value="${esc(p.name)}" ${p.name===value?'selected':''}>${esc(p.name)}</option>`).join('');
+  if(value && !has) opts+=`<option value="${esc(value)}" selected>${esc(value)} (frei)</option>`;
+  return `<select id="${id}">${opts}</select>`;
+}
+function fieldsHtml(it){
+  const catOpts=CATEGORIES.map(c=>`<option value="${c.key}" ${c.key===it.cat?'selected':''}>${c.name}</option>`).join('');
+  const prioOpts=['niedrig','mittel','hoch'].map(p=>`<option value="${p}" ${p===it.prio?'selected':''}>${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('');
+  return `
+    <div class="fgrid">
+      <label>Kategorie</label><select id="d-cat">${catOpts}</select>
+      <label>Priorität</label><select id="d-prio">${prioOpts}</select>
+      <label>Zugewiesen an</label>${ownerSelect('d-owner', it.owner)}
+      <label>Bereich</label><input id="d-bereich" type="text" value="${esc(it.bereich)}" placeholder="Abteilung / Bereich">
+      <label>Gemeldet von</label><input id="d-repby" type="text" value="${esc(it.reportedBy)}" placeholder="Name">
+      <label>Gemeldet am</label><input id="d-repat" type="date" value="${esc(it.reportedAt)}">
+      <label>Fällig bis</label><input id="d-due" type="date" value="${esc(it.due)}">
+    </div>`;
+}
+function activitiesHtml(it){
+  const list=(it.activities||[]).slice().sort((a,b)=>(a.due||'').localeCompare(b.due||''));
+  if(!list.length) return '';
+  return `<div class="act-list">`+list.map(a=>{
+    const od=isOverdue(a.due,it.status);
+    return `<div class="act-item" data-aid="${a.id}">
+      <span class="ai-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <div class="ai-main">
+        ${a.due?`<div class="ai-due ${od?'overdue':''}">Fällig ${fmtDate(a.due)}${od?' · überfällig':''}</div>`:''}
+        <div class="ai-txt">${esc(a.text)}</div>
+        <div class="ai-meta">${a.owner?'für '+esc(a.owner):''}</div>
+        <button class="ai-done" data-done="${a.id}"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Als erledigt markieren</button>
+      </div>
+      <button class="ai-x" data-delact="${a.id}" title="Aktivität entfernen">&times;</button>
+    </div>`;
+  }).join('')+`</div>`;
+}
+function timelineHtml(it){
+  const log=(it.log||[]).slice().sort((a,b)=>(b.ts||'').localeCompare(a.ts||''));
+  if(!log.length) return '<div class="empty-hint" style="text-align:left;padding:8px 0">Noch keine Einträge.</div>';
+  let html='<div class="timeline">'; let lastDay='';
+  log.forEach(e=>{
+    const day=dayLabel(e.ts);
+    if(day!==lastDay){ html+=`<div class="tl-day">${day}</div>`; lastDay=day; }
+    const who=e.author||'System';
+    const av=`<div class="ev-av ${e.kind==='status'||e.kind==='created'?'sys':''}" title="${esc(who)}">${e.kind==='status'||e.kind==='created'?'⚙':initials(who)}</div>`;
+    const time=`<span class="ev-time">${fmtDateTime(e.ts)}</span>`;
+    if(e.kind==='note'){
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-head"><b>${esc(who)}</b>${time}</div><div class="ev-note"><div class="ev-text">${esc(e.text)}</div></div></div></div>`;
+    } else if(e.kind==='file'){
+      const files=(e.files||[]).map(f=>{
+        if(isImg(f.mime,f.name)) return `<a data-path="${esc(f.path)}" data-web="1" title="${esc(f.name)}"><img data-path="${esc(f.path)}" alt="${esc(f.name)}"></a>`;
+        return `<a data-path="${esc(f.path)}" data-web="1" class="filechip" title="${esc(f.name)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>${esc(f.name)}</span></a>`;
+      }).join('');
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-head"><b>${esc(who)}</b> hat Dateien angehängt${time}</div><div class="ev-files">${files}</div></div></div>`;
+    } else if(e.kind==='status'){
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-status"><b>${esc(who)}</b> Phase: ${esc(e.from)} → <span class="chip">${esc(e.to)}</span>${time}</div></div></div>`;
+    } else if(e.kind==='activity'){
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-status"><b>${esc(who)}</b> hat eine Aktivität geplant: „${esc(e.text)}"${e.due?' (fällig '+fmtDate(e.due)+')':''}${time}</div></div></div>`;
+    } else if(e.kind==='activity-done'){
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-status"><b>${esc(who)}</b> hat erledigt: „${esc(e.text)}"${time}</div></div></div>`;
+    } else if(e.kind==='created'){
+      html+=`<div class="ev">${av}<div class="ev-main"><div class="ev-status"><b>${esc(who)}</b> hat den Punkt erstellt${time}</div></div></div>`;
+    }
+  });
+  html+='</div>';
+  return html;
+}
+function chatterHtml(it){
+  const t=(k,ic,lbl)=>`<button class="ctab ${activeTab===k?'active':''}" data-tab="${k}">${ic} ${lbl}</button>`;
+  const noteIc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>';
+  const actIc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  const fileIc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05l-9.2 9.2a5 5 0 0 1-7.1-7.1l9.2-9.2a3 3 0 0 1 4.2 4.2l-9.2 9.2a1 1 0 0 1-1.4-1.4l8.5-8.5"/></svg>';
+  const fileDisabled = SPIDS.driveId ? '' : 'title="Anhänge nicht verfügbar" disabled style="opacity:.5"';
+  return `
+    <div class="ctabs">${t('note',noteIc,'Notiz')}${t('activity',actIc,'Aktivität')}<button class="ctab" data-tab="file" ${fileDisabled}>${fileIc} Anhang</button></div>
+    <div class="cbox ${activeTab==='note'?'show':''}" id="box-note">
+      <textarea id="noteText" placeholder="Notiz hinterlassen …"></textarea>
+      <div class="cact"><button class="solid" id="noteSave">Notiz speichern</button></div>
+    </div>
+    <div class="cbox ${activeTab==='activity'?'show':''}" id="box-activity">
+      <textarea id="actText" placeholder="Nächster Schritt …"></textarea>
+      <div class="crow">${ownerSelect('actOwner', ME)}<input id="actDue" type="date" value="${esc(it.due||'')}"></div>
+      <div class="cact"><button class="solid" id="actSave">Aktivität planen</button></div>
+    </div>
+    ${activitiesHtml(it)}
+    <div class="dsec-label" style="margin-top:6px">Verlauf</div>
+    ${timelineHtml(it)}`;
+}
 
-/* ---------------- Toolbar ---------------- */
-document.getElementById('newBtn').addEventListener('click',()=>openModal(null));
+function renderDetail(it){
+  const cat=catMap[it.cat]||{};
+  const tnum = it._new ? 'Neuer Punkt' : '#'+String(it.id);
+  dcard.innerHTML = `
+    <div class="dtop">
+      <div class="dtop-row">
+        <span class="tnum">${tnum}</span>
+        <button class="x" id="dClose" title="Schließen">&times;</button>
+      </div>
+      <div class="stagebar" id="stageBar">${stageBarHtml(it)}</div>
+    </div>
+    <div class="dbody">
+      <div class="dmain">
+        <input class="dtitle" id="d-title" value="${esc(it.title)}" placeholder="Titel des Tagesordnungspunkts">
+        ${fieldsHtml(it)}
+        <div class="dsec-label">Beschreibung</div>
+        <textarea class="ddesc" id="d-desc" placeholder="Details, Hintergrund, Beschluss …">${esc(it.desc)}</textarea>
+        <div class="dmain-foot">
+          <button class="solid" id="dSave">Speichern</button>
+          <span id="dHint" style="font-size:12.5px;color:var(--text-soft)"></span>
+          ${it._new?'':'<button class="del" id="dDelete">Punkt löschen</button>'}
+        </div>
+      </div>
+      <div class="dside">${chatterHtml(it)}</div>
+    </div>`;
+  wireDetail(it);
+  loadThumbnails();
+}
+
+function grabFields(it){
+  const g=id=>{ const el=document.getElementById(id); return el?el.value:undefined; };
+  it.title=(g('d-title')||'').trim(); it.desc=(g('d-desc')||'').trim();
+  it.cat=g('d-cat')||it.cat; it.prio=g('d-prio')||it.prio; it.owner=(g('d-owner')||'').trim();
+  it.bereich=(g('d-bereich')||'').trim(); it.reportedBy=(g('d-repby')||'').trim();
+  it.reportedAt=g('d-repat')||''; it.due=g('d-due')||'';
+}
+async function persist(it){
+  grabFields(it);
+  if(!it.title){ const h=document.getElementById('dHint'); if(h) h.textContent='Bitte einen Titel eingeben.'; document.getElementById('d-title').focus(); return false; }
+  await withSync(async ()=>{
+    if(String(it.id).startsWith('tmp')){ const newId=await spCreate(it); it.id=newId; it._new=false; detailId=newId; }
+    else { await saveMerge(it); }
+  });
+  return true;
+}
+function wireDetail(it){
+  document.getElementById('dClose').addEventListener('click',()=>{ grabFields(it); if(it.title.trim()){ persist(it).then(()=>{ render(); }); } closeDetail(); });
+  document.getElementById('dSave').addEventListener('click',async ()=>{ if(await persist(it)){ render(); const h=document.getElementById('dHint'); if(h){ h.textContent='Gespeichert.'; setTimeout(()=>{if(h)h.textContent='';},1500);} renderDetail(it);} });
+  const del=document.getElementById('dDelete');
+  if(del) del.addEventListener('click',()=>{ if(confirm('Diesen Punkt wirklich löschen?')){ const id=it.id; items=items.filter(x=>String(x.id)!==String(id)); detailOv.classList.remove('open'); detailId=null; render(); withSync(()=>spDelete(id)); } });
+  // Statusleiste
+  document.querySelectorAll('#stageBar .stage').forEach(b=> b.addEventListener('click',()=>{
+    grabFields(it);
+    if(String(it.id).startsWith('tmp')){ if(!it.title.trim()){ document.getElementById('dHint').textContent='Bitte zuerst Titel + Speichern.'; return; } persist(it).then(()=>changeStatus(it, b.dataset.st)); }
+    else changeStatus(it, b.dataset.st);
+  }));
+  // Chatter-Tabs
+  document.querySelectorAll('.ctab').forEach(b=> b.addEventListener('click',()=>{ if(b.disabled) return;
+    if(b.dataset.tab==='file'){ document.getElementById('fileInput').click(); return; }
+    activeTab=b.dataset.tab;
+    document.querySelectorAll('.ctab').forEach(x=>x.classList.toggle('active', x.dataset.tab===activeTab));
+    ['note','activity'].forEach(k=>{ const el=document.getElementById('box-'+k); if(el) el.classList.toggle('show',k===activeTab); });
+  }));
+  // Notiz speichern
+  const ns=document.getElementById('noteSave');
+  if(ns) ns.addEventListener('click',async ()=>{
+    const txt=document.getElementById('noteText').value.trim(); if(!txt) return;
+    if(String(it.id).startsWith('tmp')){ grabFields(it); if(!it.title.trim()){ alert('Bitte zuerst Titel eingeben und speichern.'); return;} if(!await persist(it)) return; }
+    grabFields(it); it.log=it.log||[]; it.log.push({ id:uid(), kind:'note', text:txt, author:ME, ts:nowIso() });
+    renderDetail(it); await withSync(()=>saveMerge(it)); render();
+  });
+  // Aktivität planen
+  const as=document.getElementById('actSave');
+  if(as) as.addEventListener('click',async ()=>{
+    const txt=document.getElementById('actText').value.trim(); if(!txt) return;
+    const owner=document.getElementById('actOwner').value.trim(); const due=document.getElementById('actDue').value;
+    if(String(it.id).startsWith('tmp')){ grabFields(it); if(!it.title.trim()){ alert('Bitte zuerst Titel eingeben und speichern.'); return;} if(!await persist(it)) return; }
+    grabFields(it); const aid=uid(); it.activities=it.activities||[]; it.activities.push({ id:aid, text:txt, owner, due });
+    it.log=it.log||[]; it.log.push({ id:uid(), kind:'activity', text:txt, owner, due, author:ME, ts:nowIso() });
+    renderDetail(it); await withSync(()=>saveMerge(it)); render();
+  });
+  // Aktivität erledigt / löschen
+  document.querySelectorAll('[data-done]').forEach(b=> b.addEventListener('click',async ()=>{
+    const aid=b.dataset.done; const a=(it.activities||[]).find(x=>x.id===aid); if(!a) return;
+    it.activities=it.activities.filter(x=>x.id!==aid);
+    it.log=it.log||[]; it.log.push({ id:uid(), kind:'activity-done', text:a.text, author:ME, ts:nowIso() });
+    renderDetail(it); await withSync(()=>saveMerge(it)); render();
+  }));
+  document.querySelectorAll('[data-delact]').forEach(b=> b.addEventListener('click',async ()=>{
+    const aid=b.dataset.delact; it.activities=(it.activities||[]).filter(x=>x.id!==aid);
+    renderDetail(it); await withSync(()=>saveMerge(it)); render();
+  }));
+  // Anhang-Klicks (öffnen in SharePoint)
+  document.querySelectorAll('.ev-files a[data-path]').forEach(a=> a.addEventListener('click',async (e)=>{
+    e.preventDefault(); try{ const u=await spFileUrls(a.dataset.path); window.open(u.web||u.download,'_blank'); }catch(err){ alert('Datei konnte nicht geöffnet werden.'); }
+  }));
+}
+async function loadThumbnails(){
+  const imgs=document.querySelectorAll('.ev-files img[data-path]');
+  for(const img of imgs){
+    try{ const u=await spFileUrls(img.dataset.path); if(u.download) img.src=u.download; }catch(e){ /* still */ }
+  }
+}
+// Datei-Upload (gemeinsamer Input)
+document.getElementById('fileInput').addEventListener('change', async (e)=>{
+  const files=Array.from(e.target.files||[]); e.target.value='';
+  if(!files.length) return;
+  const it=items.find(x=>String(x.id)===String(detailId)); if(!it) return;
+  if(String(it.id).startsWith('tmp')){ grabFields(it); if(!it.title.trim()){ alert('Bitte zuerst Titel eingeben und speichern.'); return;} if(!await persist(it)) return; }
+  await withSync(async ()=>{
+    const entry={ id:uid(), kind:'file', files:[], author:ME, ts:nowIso() };
+    for(const f of files){ const path=await spUploadFile(it.id, f); entry.files.push({ name:f.name, path, mime:f.type }); }
+    it.log=it.log||[]; it.log.push(entry);
+    await saveMerge(it);
+  });
+  renderDetail(it); render();
+});
+
+/* ============================================================
+   AKTIVITÄTEN-PANEL ("Meine Aufgaben")
+   ============================================================ */
+function isMine(owner){
+  if(!owner || !ME) return false;
+  const o=owner.trim().toLowerCase(), m=ME.trim().toLowerCase();
+  return o===m || o.includes(m) || m.includes(o) || o===initials(ME).toLowerCase();
+}
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function relDue(iso){
+  if(!iso) return {txt:'ohne Datum',cls:'fut'};
+  const t=today();
+  if(iso<t){ const d=daysBetween(iso,t); return {txt:'vor '+d+' Tag'+(d===1?'':'en'),cls:'over'}; }
+  if(iso===t) return {txt:'Heute',cls:'today'};
+  const d=daysBetween(t,iso); return {txt:'in '+d+' Tag'+(d===1?'':'en'),cls:'fut'};
+}
+function myDueCount(){
+  return items.reduce((n,it)=> n + (it.activities||[]).filter(a=> isMine(a.owner) && a.due && a.due<=today()).length, 0);
+}
+function updateActBadge(){
+  const pill=document.getElementById('actCount'); if(!pill) return;
+  const n=myDueCount();
+  if(n){ pill.textContent=n; pill.style.display=''; } else pill.style.display='none';
+}
+function completeActivity(it, aid){
+  const a=(it.activities||[]).find(x=>x.id===aid); if(!a) return;
+  it.activities=it.activities.filter(x=>x.id!==aid);
+  it.log=it.log||[]; it.log.push({ id:uid(), kind:'activity-done', text:a.text, author:ME, ts:nowIso() });
+  withSync(()=>saveMerge(it)).then(()=>{ if(detailId===it.id) renderDetail(it); render(); renderActivitiesPanel(); });
+}
+function openActivities(){ document.getElementById('activities').classList.add('open'); renderActivitiesPanel(); }
+function closeActivities(){ document.getElementById('activities').classList.remove('open'); }
+function renderActivitiesPanel(){
+  const card=document.getElementById('apcard');
+  let rows=[];
+  items.forEach(it=> (it.activities||[]).forEach(a=> rows.push({it,a})));
+  if(actMine) rows=rows.filter(r=> isMine(r.a.owner));
+  if(actDueOnly) rows=rows.filter(r=> r.a.due && r.a.due<=today());
+  rows.sort((x,y)=> (x.a.due||'9999-99').localeCompare(y.a.due||'9999-99'));
+  const body = rows.length ? rows.map(r=>{
+    const cat=catMap[r.it.cat]||{color:'#999'}; const rd=relDue(r.a.due);
+    return `<div class="actrow" data-open="${r.it.id}">
+      <div class="ar-main">
+        <div class="ar-task">${esc(r.a.text)}</div>
+        <div class="ar-tick"><span class="cat" style="background:${cat.color}"></span>${esc(r.it.title)} · #${esc(r.it.id)}${r.a.owner?' · für '+esc(r.a.owner):''}</div>
+      </div>
+      <div class="ar-due ${rd.cls}">${rd.txt}${r.a.due?'<div style="font-weight:400;font-size:11.5px;color:var(--grey-light)">'+fmtDate(r.a.due)+'</div>':''}</div>
+      <div class="ar-acts">
+        <button class="done" data-done="${r.it.id}|${r.a.id}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Erledigt</button>
+        <button class="open" data-opent="${r.it.id}">Öffnen</button>
+      </div>
+    </div>`;
+  }).join('') : `<div class="ap-empty">Keine ${actDueOnly?'überfälligen/heutigen ':'offenen '}Aufgaben${actMine?' für dich':''}. 🎉</div>`;
+  card.innerHTML = `
+    <div class="aphead">
+      <h2>Aktivitäten</h2>
+      <button class="chip-f ${actMine?'on':''}" id="fMine">Nur meine</button>
+      <button class="chip-f ${actDueOnly?'on':''}" id="fDue">Überfällig oder heute</button>
+      <button class="x" id="apClose" title="Schließen">&times;</button>
+    </div>
+    <div class="apbody">${body}</div>`;
+  document.getElementById('apClose').onclick=closeActivities;
+  document.getElementById('fMine').onclick=()=>{ actMine=!actMine; renderActivitiesPanel(); };
+  document.getElementById('fDue').onclick=()=>{ actDueOnly=!actDueOnly; renderActivitiesPanel(); };
+  card.querySelectorAll('[data-done]').forEach(b=> b.addEventListener('click',e=>{ e.stopPropagation();
+    const parts=b.dataset.done.split('|'); const it=items.find(x=>String(x.id)===parts[0]); if(it) completeActivity(it,parts[1]); }));
+  card.querySelectorAll('[data-opent]').forEach(b=> b.addEventListener('click',e=>{ e.stopPropagation(); const iid=b.dataset.opent; closeActivities(); openDetail(iid); }));
+  card.querySelectorAll('.actrow').forEach(r=> r.addEventListener('click',()=>{ closeActivities(); openDetail(r.dataset.open); }));
+}
+
+/* ============================================================
+   TOOLBAR + INIT
+   ============================================================ */
+document.getElementById('newBtn').addEventListener('click',()=>openDetail(null));
+document.getElementById('actBtn').addEventListener('click',openActivities);
+document.getElementById('activities').addEventListener('click',e=>{ if(e.target.id==='activities') closeActivities(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && document.getElementById('activities').classList.contains('open')) closeActivities(); });
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('catFilter').addEventListener('change',render);
 document.getElementById('reloadBtn').addEventListener('click',()=>withSync(async ()=>{ items=await spLoad(); render(); }));
+detailOv.addEventListener('click',e=>{ if(e.target===detailOv){ const it=items.find(x=>String(x.id)===String(detailId)); if(it){ grabFields(it); if(it.title.trim()) persist(it).then(()=>render()); } closeDetail(); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && detailOv.classList.contains('open')){ const it=items.find(x=>String(x.id)===String(detailId)); if(it){ grabFields(it); if(it.title.trim()) persist(it).then(()=>render()); } closeDetail(); } });
 
-/* ---------------- Init ---------------- */
 (function init(){
-  const catSel=document.getElementById('f-cat'), catFilter=document.getElementById('catFilter');
-  CATEGORIES.forEach(c=>{
-    catSel.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.name}</option>`);
-    catFilter.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.name}</option>`);
-  });
-  const statSel=document.getElementById('f-status');
-  COLUMNS.forEach(c=> statSel.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.title}</option>`));
-  // MSAL initialisieren; falls schon angemeldet -> direkt rein
+  const catFilter=document.getElementById('catFilter');
+  CATEGORIES.forEach(c=> catFilter.insertAdjacentHTML('beforeend',`<option value="${c.key}">${c.name}</option>`));
   msalInit().then(()=>{ if(msalAccount) return onLoggedIn(); })
-    .catch(e=>{ document.getElementById('loginStatus').textContent = 'Hinweis: '+(e.message||e); console.warn(e); });
+    .catch(e=>{ document.getElementById('loginStatus').textContent='Hinweis: '+(e.message||e); console.warn(e); });
 })();
 </script>
 </body>
