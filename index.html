@@ -909,10 +909,17 @@ document.getElementById('fileInput').addEventListener('change', async (e)=>{
 /* ============================================================
    AKTIVITÄTEN-PANEL ("Meine Aufgaben")
    ============================================================ */
+// Namen wortbasiert vergleichen: Reihenfolge/Komma egal ("WAHL, Johannes" == "Johannes Wahl")
+function nameKey(s){ return (s||'').toLowerCase().replace(/[,.;]/g,' ').split(/\s+/).filter(Boolean).sort().join(' '); }
 function isMine(owner){
   if(!owner || !ME) return false;
-  const o=owner.trim().toLowerCase(), m=ME.trim().toLowerCase();
-  return o===m || o.includes(m) || m.includes(o) || o===initials(ME).toLowerCase();
+  const o=nameKey(owner), m=nameKey(ME);
+  if(!o || !m) return false;
+  if(o===m) return true;
+  const ot=o.split(' '), mt=m.split(' ');
+  if(ot.every(t=>mt.includes(t)) || mt.every(t=>ot.includes(t))) return true;  // Teilmengen (z. B. nur Nachname)
+  if(owner.trim().toLowerCase()===initials(ME).toLowerCase()) return true;       // Kürzel "JW"
+  return false;
 }
 function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
 function relDue(iso){
