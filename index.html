@@ -217,6 +217,9 @@
   .actrow:hover{background:var(--beige-soft)}
   .ar-main{flex:1;min-width:0}
   .ar-task{font-size:14.5px;color:var(--text)}
+  .ar-task .tchip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:4px;padding:1px 6px;margin-right:7px;vertical-align:middle}
+  .tchip.ticket{background:#e7ddcd;color:#7a5a1e}
+  .tchip.act{background:#e3ece3;color:#3f6b41}
   .ar-tick{font-size:12.5px;color:var(--text-soft);margin-top:2px;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .ar-tick .cat{display:inline-block;width:9px;height:9px;border-radius:3px;flex-shrink:0}
   .ar-due{font-size:13px;font-weight:700;white-space:nowrap;min-width:104px;text-align:right}
@@ -310,7 +313,7 @@ const MS_CONFIG = {
   listName: 'Agenda'
 };
 const GRAPH = 'https://graph.microsoft.com/v1.0';
-const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All','GroupMember.Read.All'];
+const GRAPH_SCOPES = ['User.Read','User.ReadBasic.All','Sites.ReadWrite.All','GroupMember.Read.All'];
 // Immer Weiterleitungs-Login (robust gegen blockierte/verschachtelte Popups in
 // kleinen oder eingebetteten Fenstern – z. B. block_nested_popups/popup_window_error).
 const USE_REDIRECT = true;
@@ -920,7 +923,12 @@ function relDue(iso){
   const d=daysBetween(t,iso); return {txt:'in '+d+' Tag'+(d===1?'':'en'),cls:'fut'};
 }
 function myDueCount(){
-  return items.reduce((n,it)=> n + (it.activities||[]).filter(a=> isMine(a.owner) && a.due && a.due<=today()).length, 0);
+  let n=0;
+  items.forEach(it=>{
+    if(it.owner && it.status!=='erledigt' && isMine(it.owner) && it.due && it.due<=today()) n++;
+    (it.activities||[]).forEach(a=>{ if(isMine(a.owner) && a.due && a.due<=today()) n++; });
+  });
+  return n;
 }
 function updateActBadge(){
   const pill=document.getElementById('actCount'); if(!pill) return;
@@ -938,27 +946,32 @@ function closeActivities(){ document.getElementById('activities').classList.remo
 function renderActivitiesPanel(){
   const card=document.getElementById('apcard');
   let rows=[];
-  items.forEach(it=> (it.activities||[]).forEach(a=> rows.push({it,a})));
-  if(actMine) rows=rows.filter(r=> isMine(r.a.owner));
-  if(actDueOnly) rows=rows.filter(r=> r.a.due && r.a.due<=today());
-  rows.sort((x,y)=> (x.a.due||'9999-99').localeCompare(y.a.due||'9999-99'));
+  items.forEach(it=>{
+    if(it.owner && it.status!=='erledigt') rows.push({ kind:'ticket', it, owner:it.owner, text:it.title, due:it.due });
+    (it.activities||[]).forEach(a=> rows.push({ kind:'activity', it, owner:a.owner, text:a.text, due:a.due, aid:a.id }));
+  });
+  if(actMine) rows=rows.filter(r=> isMine(r.owner));
+  if(actDueOnly) rows=rows.filter(r=> r.due && r.due<=today());
+  rows.sort((x,y)=> (x.due||'9999-99').localeCompare(y.due||'9999-99'));
   const body = rows.length ? rows.map(r=>{
-    const cat=catMap[r.it.cat]||{color:'#999'}; const rd=relDue(r.a.due);
+    const cat=catMap[r.it.cat]||{color:'#999'}; const rd=relDue(r.due);
+    const chip = r.kind==='ticket' ? '<span class="tchip ticket">Punkt</span>' : '<span class="tchip act">Aktivität</span>';
+    const stat = colMap[r.it.status]?colMap[r.it.status].title:'';
+    const acts = r.kind==='ticket'
+      ? `<button class="open" data-opent="${r.it.id}">Öffnen</button>`
+      : `<button class="done" data-actdone="${r.it.id}|${r.aid}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Erledigt</button><button class="open" data-opent="${r.it.id}">Öffnen</button>`;
     return `<div class="actrow" data-open="${r.it.id}">
       <div class="ar-main">
-        <div class="ar-task">${esc(r.a.text)}</div>
-        <div class="ar-tick"><span class="cat" style="background:${cat.color}"></span>${esc(r.it.title)} · #${esc(r.it.id)}${r.a.owner?' · für '+esc(r.a.owner):''}</div>
+        <div class="ar-task">${chip}${esc(r.text)}</div>
+        <div class="ar-tick"><span class="cat" style="background:${cat.color}"></span>${r.kind==='activity'?esc(r.it.title)+' · ':''}#${esc(r.it.id)} · ${esc(stat)}${r.owner?' · '+esc(r.owner):''}</div>
       </div>
-      <div class="ar-due ${rd.cls}">${rd.txt}${r.a.due?'<div style="font-weight:400;font-size:11.5px;color:var(--grey-light)">'+fmtDate(r.a.due)+'</div>':''}</div>
-      <div class="ar-acts">
-        <button class="done" data-done="${r.it.id}|${r.a.id}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Erledigt</button>
-        <button class="open" data-opent="${r.it.id}">Öffnen</button>
-      </div>
+      <div class="ar-due ${rd.cls}">${rd.txt}${r.due?'<div style="font-weight:400;font-size:11.5px;color:var(--grey-light)">'+fmtDate(r.due)+'</div>':''}</div>
+      <div class="ar-acts">${acts}</div>
     </div>`;
   }).join('') : `<div class="ap-empty">Keine ${actDueOnly?'überfälligen/heutigen ':'offenen '}Aufgaben${actMine?' für dich':''}. 🎉</div>`;
   card.innerHTML = `
     <div class="aphead">
-      <h2>Aktivitäten</h2>
+      <h2>Meine Aufgaben</h2>
       <button class="chip-f ${actMine?'on':''}" id="fMine">Nur meine</button>
       <button class="chip-f ${actDueOnly?'on':''}" id="fDue">Überfällig oder heute</button>
       <button class="x" id="apClose" title="Schließen">&times;</button>
@@ -967,8 +980,8 @@ function renderActivitiesPanel(){
   document.getElementById('apClose').onclick=closeActivities;
   document.getElementById('fMine').onclick=()=>{ actMine=!actMine; renderActivitiesPanel(); };
   document.getElementById('fDue').onclick=()=>{ actDueOnly=!actDueOnly; renderActivitiesPanel(); };
-  card.querySelectorAll('[data-done]').forEach(b=> b.addEventListener('click',e=>{ e.stopPropagation();
-    const parts=b.dataset.done.split('|'); const it=items.find(x=>String(x.id)===parts[0]); if(it) completeActivity(it,parts[1]); }));
+  card.querySelectorAll('[data-actdone]').forEach(b=> b.addEventListener('click',e=>{ e.stopPropagation();
+    const parts=b.dataset.actdone.split('|'); const it=items.find(x=>String(x.id)===parts[0]); if(it) completeActivity(it,parts[1]); }));
   card.querySelectorAll('[data-opent]').forEach(b=> b.addEventListener('click',e=>{ e.stopPropagation(); const iid=b.dataset.opent; closeActivities(); openDetail(iid); }));
   card.querySelectorAll('.actrow').forEach(r=> r.addEventListener('click',()=>{ closeActivities(); openDetail(r.dataset.open); }));
 }
