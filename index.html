@@ -310,7 +310,7 @@ const MS_CONFIG = {
   listName: 'Agenda'
 };
 const GRAPH = 'https://graph.microsoft.com/v1.0';
-const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All'];
+const GRAPH_SCOPES = ['User.Read','Sites.ReadWrite.All','GroupMember.Read.All'];
 // Immer Weiterleitungs-Login (robust gegen blockierte/verschachtelte Popups in
 // kleinen oder eingebetteten Fenstern – z. B. block_nested_popups/popup_window_error).
 const USE_REDIRECT = true;
@@ -411,8 +411,8 @@ async function graphTok(token, path){
 async function loadPeople(){
   PEOPLE=[]; MEID='';
   let token;
-  try{ token=(await msalApp.acquireTokenSilent({ scopes:['GroupMember.Read.All'], account:msalAccount })).accessToken; }
-  catch(e){ console.warn('Personen: Berechtigung GroupMember.Read.All noch nicht erteilt – Freitext-Fallback.'); return; }
+  try{ token=(await msalApp.acquireTokenSilent({ scopes:GRAPH_SCOPES, account:msalAccount })).accessToken; }
+  catch(e){ console.warn('Personen: Token (GroupMember.Read.All) nicht still erhältlich – Freitext-Fallback.', e&&e.message); return; }
   try{
     const nick=MS_CONFIG.sitePath.split('/').filter(Boolean).pop();
     const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
@@ -673,7 +673,7 @@ function stageBarHtml(it){
 }
 // "Zugewiesen an": Dropdown aus PEOPLE, sonst Freitext-Fallback. Hält auch Alt-/Freitextwerte.
 function ownerSelect(id, value){
-  if(!PEOPLE.length) return `<input id="${id}" type="text" value="${esc(value)}" placeholder="Name">`;
+  if(!PEOPLE.length) return `<input id="${id}" type="text" value="${esc(value)}" placeholder="Name" autocomplete="off">`;
   const has=PEOPLE.some(p=>p.name===value);
   let opts=`<option value="">— nicht zugewiesen —</option>`+
     PEOPLE.map(p=>`<option value="${esc(p.name)}" ${p.name===value?'selected':''}>${esc(p.name)}</option>`).join('');
