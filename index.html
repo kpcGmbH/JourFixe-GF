@@ -415,9 +415,22 @@ async function loadPeople(){
   catch(e){ console.warn('Personen: Token (GroupMember.Read.All) nicht still erhältlich – Freitext-Fallback.', e&&e.message); return; }
   try{
     const nick=MS_CONFIG.sitePath.split('/').filter(Boolean).pop();
-    const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
-    if(!g.value || !g.value.length){ console.warn('Personen: M365-Gruppe "'+nick+'" nicht gefunden.'); return; }
-    const gid=g.value[0].id;
+    const nl=nick.toLowerCase();
+    let gid=null;
+    // 1) Gruppe über die eigene Mitgliedschaft finden (robust gegen abweichenden mailNickname)
+    try{
+      const mine=await graphTok(token,'/me/memberOf/microsoft.graph.group?$select=id,displayName,mailNickname&$top=200');
+      (mine.value||[]).forEach(g=>{ if(gid) return;
+        const mn=(g.mailNickname||'').toLowerCase(), dn=(g.displayName||'').toLowerCase();
+        if(mn===nl || dn===nl || mn===nl.replace(/[_\- ]/g,'') || dn===nl.replace(/[_\- ]/g,'')) gid=g.id; });
+    }catch(e){ console.warn('JourFixe/Personen: /me/memberOf nicht abrufbar:', e.message); }
+    // 2) Fallback: direkter Gruppenfilter nach mailNickname
+    if(!gid){
+      try{ const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
+        if(g.value && g.value.length) gid=g.value[0].id; }
+      catch(e){ console.warn('JourFixe/Personen: /groups-Filter nicht abrufbar:', e.message); }
+    }
+    if(!gid){ console.warn('JourFixe/Personen: Gruppe zur Site "'+nick+'" nicht gefunden – Freitext-Fallback.'); return; }
     let url='/groups/'+gid+'/members/microsoft.graph.user?$select=id,displayName,mail,userPrincipalName&$top=100';
     while(url){
       const m=await graphTok(token,url);
@@ -427,8 +440,9 @@ async function loadPeople(){
     PEOPLE.sort((a,b)=>a.name.localeCompare(b.name));
     const un=(((msalAccount&&msalAccount.username)||'')+'').toLowerCase();
     const me=PEOPLE.find(p=>p.mail===un) || PEOPLE.find(p=>p.name.toLowerCase()===(ME||'').toLowerCase());
-    if(me){ MEID=me.id; ME=me.name; }   // eigenen offiziellen Anzeigenamen übernehmen
-  }catch(e){ console.warn('Personenliste nicht geladen (Freitext-Fallback):', e.message); PEOPLE=[]; }
+    if(me){ MEID=me.id; ME=me.name; }
+    console.log('JourFixe/Personen geladen:', PEOPLE.length, PEOPLE.map(p=>p.name));
+  }catch(e){ console.warn('JourFixe/Personen: nicht geladen –', e.message); PEOPLE=[]; }
 }
 
 /* ---- Liste (Agenda) ---- */
