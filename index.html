@@ -349,7 +349,7 @@ let MEID = '';     // eigene User-ID
    BACKEND: MSAL + Microsoft Graph
    ============================================================ */
 let msalApp = null, msalAccount = null;
-const SPIDS = { siteId:null, listId:null, driveId:null };
+const SPIDS = { siteId:null, listId:null, driveId:null, groupId:null };
 
 async function msalInit(){
   msalApp = new msal.PublicClientApplication({
@@ -396,7 +396,9 @@ async function resolveIds(){
     encodeURIComponent("displayName eq '"+MS_CONFIG.listName+"'"))).json();
   if(!lists.value || !lists.value.length) throw new Error('Liste "'+MS_CONFIG.listName+'" nicht gefunden');
   SPIDS.listId = lists.value[0].id;
-  try{ const drv = await (await graph('/sites/'+SPIDS.siteId+'/drive')).json(); SPIDS.driveId = drv.id; }
+  try{ const drv = await (await graph('/sites/'+SPIDS.siteId+'/drive')).json();
+    SPIDS.driveId = drv.id;
+    SPIDS.groupId = (drv.owner && drv.owner.group && drv.owner.group.id) || null; }
   catch(e){ SPIDS.driveId = null; console.warn('Dokumentbibliothek nicht erreichbar – Anhänge deaktiviert:', e.message); }
 }
 
@@ -416,11 +418,12 @@ async function loadPeople(){
   try{
     const nick=MS_CONFIG.sitePath.split('/').filter(Boolean).pop();
     const nl=nick.toLowerCase();
-    let gid=null;
-    // gid: exakter mailNickname-Filter zuerst (bewährt), sonst über eigene Mitgliedschaft
-    try{ const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
-      if(g.value && g.value.length) gid=g.value[0].id; }
-    catch(e){ console.warn('JourFixe/Personen: /groups-Filter:', e.message); }
+    let gid=SPIDS.groupId||null;   // bevorzugt: DIE Gruppe dieser Site (aus dem Drive-Owner – kein Raten)
+    if(!gid){
+      try{ const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
+        if(g.value && g.value.length) gid=g.value[0].id; }
+      catch(e){ console.warn('JourFixe/Personen: /groups-Filter:', e.message); }
+    }
     if(!gid){
       try{ const mine=await graphTok(token,'/me/memberOf/microsoft.graph.group?$select=id,displayName,mailNickname&$top=200');
         (mine.value||[]).forEach(g=>{ if(gid) return; const mn=(g.mailNickname||'').toLowerCase(), dn=(g.displayName||'').toLowerCase();
@@ -428,15 +431,18 @@ async function loadPeople(){
       catch(e){ console.warn('JourFixe/Personen: /me/memberOf:', e.message); }
     }
     if(!gid){ console.warn('JourFixe/Personen: Gruppe "'+nick+'" nicht gefunden – Freitext-Fallback.'); return; }
+    console.log('JourFixe/Personen: Gruppe', gid, '(Quelle:', SPIDS.groupId?'Site/Drive-Owner':'Namenssuche', ')');
     // Mitglieder UND Eigentümer laden (Personen sind je nach Anlage als Owner geführt), nur User behalten
     const byId={};
     for(const rel of ['members','owners']){
-      let url='/groups/'+gid+'/'+rel+'?$select=id,displayName,mail,userPrincipalName&$top=100';
+      let url='/groups/'+gid+'/'+rel+'/microsoft.graph.user?$select=id,displayName,mail,userPrincipalName&$top=100', raw=0, used=0;
       try{
         while(url){ const r=await graphTok(token,url);
-          (r.value||[]).forEach(u=>{ if(u.displayName && u.userPrincipalName) byId[u.id]={ id:u.id, name:u.displayName, mail:((u.mail||u.userPrincipalName||'')+'').toLowerCase() }; });
+          (r.value||[]).forEach(u=>{ raw++;
+            if(u.displayName && (u.userPrincipalName || u.mail)){ used++; byId[u.id]={ id:u.id, name:u.displayName, mail:((u.mail||u.userPrincipalName||'')+'').toLowerCase() }; } });
           url=r['@odata.nextLink'] ? r['@odata.nextLink'].replace(GRAPH,'') : null; }
-      }catch(e){ console.warn('JourFixe/Personen: '+rel+':', e.message); }
+        console.log('JourFixe/Personen '+rel+': roh='+raw+' übernommen='+used);
+      }catch(e){ console.warn('JourFixe/Personen: '+rel+' Fehler:', e.message); }
     }
     PEOPLE=Object.values(byId).sort((a,b)=>a.name.localeCompare(b.name));
     const un=(((msalAccount&&msalAccount.username)||'')+'').toLowerCase();
