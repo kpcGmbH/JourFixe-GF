@@ -417,27 +417,28 @@ async function loadPeople(){
     const nick=MS_CONFIG.sitePath.split('/').filter(Boolean).pop();
     const nl=nick.toLowerCase();
     let gid=null;
-    // 1) Gruppe über die eigene Mitgliedschaft finden (robust gegen abweichenden mailNickname)
-    try{
-      const mine=await graphTok(token,'/me/memberOf/microsoft.graph.group?$select=id,displayName,mailNickname&$top=200');
-      (mine.value||[]).forEach(g=>{ if(gid) return;
-        const mn=(g.mailNickname||'').toLowerCase(), dn=(g.displayName||'').toLowerCase();
-        if(mn===nl || dn===nl || mn===nl.replace(/[_\- ]/g,'') || dn===nl.replace(/[_\- ]/g,'')) gid=g.id; });
-    }catch(e){ console.warn('JourFixe/Personen: /me/memberOf nicht abrufbar:', e.message); }
-    // 2) Fallback: direkter Gruppenfilter nach mailNickname
+    // gid: exakter mailNickname-Filter zuerst (bewährt), sonst über eigene Mitgliedschaft
+    try{ const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
+      if(g.value && g.value.length) gid=g.value[0].id; }
+    catch(e){ console.warn('JourFixe/Personen: /groups-Filter:', e.message); }
     if(!gid){
-      try{ const g=await graphTok(token,'/groups?$filter='+encodeURIComponent("mailNickname eq '"+nick+"'")+'&$select=id,displayName');
-        if(g.value && g.value.length) gid=g.value[0].id; }
-      catch(e){ console.warn('JourFixe/Personen: /groups-Filter nicht abrufbar:', e.message); }
+      try{ const mine=await graphTok(token,'/me/memberOf/microsoft.graph.group?$select=id,displayName,mailNickname&$top=200');
+        (mine.value||[]).forEach(g=>{ if(gid) return; const mn=(g.mailNickname||'').toLowerCase(), dn=(g.displayName||'').toLowerCase();
+          if(mn===nl||dn===nl||mn===nl.replace(/[_\- ]/g,'')||dn===nl.replace(/[_\- ]/g,'')) gid=g.id; }); }
+      catch(e){ console.warn('JourFixe/Personen: /me/memberOf:', e.message); }
     }
-    if(!gid){ console.warn('JourFixe/Personen: Gruppe zur Site "'+nick+'" nicht gefunden – Freitext-Fallback.'); return; }
-    let url='/groups/'+gid+'/members/microsoft.graph.user?$select=id,displayName,mail,userPrincipalName&$top=100';
-    while(url){
-      const m=await graphTok(token,url);
-      (m.value||[]).forEach(u=>{ if(u.displayName) PEOPLE.push({ id:u.id, name:u.displayName, mail:((u.mail||u.userPrincipalName||'')+'').toLowerCase() }); });
-      url=m['@odata.nextLink'] ? m['@odata.nextLink'].replace(GRAPH,'') : null;
+    if(!gid){ console.warn('JourFixe/Personen: Gruppe "'+nick+'" nicht gefunden – Freitext-Fallback.'); return; }
+    // Mitglieder UND Eigentümer laden (Personen sind je nach Anlage als Owner geführt), nur User behalten
+    const byId={};
+    for(const rel of ['members','owners']){
+      let url='/groups/'+gid+'/'+rel+'?$select=id,displayName,mail,userPrincipalName&$top=100';
+      try{
+        while(url){ const r=await graphTok(token,url);
+          (r.value||[]).forEach(u=>{ if(u.displayName && u.userPrincipalName) byId[u.id]={ id:u.id, name:u.displayName, mail:((u.mail||u.userPrincipalName||'')+'').toLowerCase() }; });
+          url=r['@odata.nextLink'] ? r['@odata.nextLink'].replace(GRAPH,'') : null; }
+      }catch(e){ console.warn('JourFixe/Personen: '+rel+':', e.message); }
     }
-    PEOPLE.sort((a,b)=>a.name.localeCompare(b.name));
+    PEOPLE=Object.values(byId).sort((a,b)=>a.name.localeCompare(b.name));
     const un=(((msalAccount&&msalAccount.username)||'')+'').toLowerCase();
     const me=PEOPLE.find(p=>p.mail===un) || PEOPLE.find(p=>p.name.toLowerCase()===(ME||'').toLowerCase());
     if(me){ MEID=me.id; ME=me.name; }
